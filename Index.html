@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#151515">
+<link rel="manifest" href="manifest.json">
+<title>Adriano Paulo Barbearia</title>
+<style>
+body{margin:0;background:#f6f3ee;font-family:Arial,sans-serif;color:#171717}.app{max-width:680px;margin:auto;background:#fff;min-height:100vh}.hero{padding:44px 20px;background:#151515;color:#fff;text-align:center}.hero h1{margin:0;font-size:34px}.hero p{margin:5px;color:#d7ab51;letter-spacing:3px;text-transform:uppercase}.hero a{color:#fff}.logo-img{width:100px;height:100px;margin:0 auto 15px;border:2px solid #d7ab51;border-radius:50%}.content{padding:22px}.hours{line-height:1.7;border:1px solid #e5dfd4;border-radius:12px;padding:14px;white-space:pre-line}.services{display:grid;gap:10px}.service{border:1px solid #ddd;border-radius:12px;padding:14px;cursor:pointer}.service.selected{border:2px solid #d7ab51;background:#fff9ec}.service h3{margin:0}.price{color:#85631d;font-weight:bold}.desc{font-size:13px;color:#666;margin:8px 0 0}.booking{background:#171717;color:#fff;border-radius:14px;padding:20px;margin-top:28px}.booking h2{margin-top:0}label{display:block;margin-top:14px;font-size:13px;font-weight:bold}input,select,textarea{box-sizing:border-box;width:100%;margin-top:6px;padding:12px;border-radius:8px;border:1px solid #ccc}textarea{height:88px}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.terms{background:#fff9e6;border:1px solid #d7ab51;border-radius:8px;padding:12px;margin:12px 0;font-size:13px;line-height:1.6;color:#171717}.terms b{color:#85631d}.check{display:flex;align-items:flex-start;gap:8px;margin:12px 0;color:#171717;background:#fff9e6;border-radius:8px;padding:8px}.check input{width:auto;margin:3px 0 0}.check label{margin:0}.confirm{width:100%;padding:15px;border:0;border-radius:8px;background:#d7ab51;margin-top:18px;font-size:16px;font-weight:bold;color:#171717;cursor:pointer}.status{display:none;padding:10px;border-radius:8px;margin-top:12px}.menu{position:fixed;top:15px;left:15px;width:45px;height:45px;background:#171717;color:#fff;border:1px solid #777;border-radius:9px;font-size:23px;z-index:2}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:20px;z-index:10}.modal.open{display:flex}.box{position:relative;background:#fff;width:min(520px,100%);max-height:85vh;overflow:auto;border-radius:14px;padding:22px}.close{position:absolute;right:10px;top:10px;width:34px;height:34px;border:0;border-radius:50%;font-size:21px;background:#eee}.error{display:none;color:#b00020}.appt{border:1px solid #ddd;border-radius:9px;padding:11px;margin:9px 0;display:flex;gap:8px;align-items:center}.appt-info{flex:1}.badge{width:24px;height:24px;border:2px solid #333;border-radius:4px;cursor:pointer;flex-shrink:0}.pending{background:#ff9800}.done{background:#4caf50}.del{background:#a72929;color:#fff;border:0;border-radius:7px;padding:8px;cursor:pointer}.dashboard{background:#f9f9f9;border:1px solid #ddd;border-radius:8px;padding:14px;margin-bottom:14px}.dashboard h3{margin:0 0 10px}.dash-item,.dash-total{display:flex;justify-content:space-between;padding:6px 0}.dash-item{border-bottom:1px solid #eee}.dash-total{font-weight:bold;color:#85631d;border-top:2px solid #d7ab51;margin-top:8px}.empty{color:#666}@media(max-width:440px){.split{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="menu" id="menuBtn" type="button">☰</button>
+<div class="app"><header class="hero"><img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'"><div style="font-size:34px">✂</div><h1>Adriano Paulo</h1><p>Barbearia</p><a href="tel:+5581988434550">(81) 98843-4550</a></header>
+<main class="content"><h2>Horários de atendimento</h2><p class="hours">Segunda-feira: 14:30 - 19:00
+Terça-feira: 09:00 - 12:00 | 14:30 - 19:00
+Quarta-feira: 09:00 - 12:00 | 15:00 - 19:00
+Quinta-feira: 09:00 - 12:00 | 14:30 - 19:00
+Sexta-feira: 09:00 - 12:00 | 14:30 - 19:00
+Sábado: 09:00 - 13:00 | 15:00 - 19:00
+Domingo: Fechado</p><h2>Escolha o serviço</h2><div class="services" id="cards"></div>
+<section class="booking"><h2>Agende seu horário</h2><form id="bookingForm"><label>Serviço<select id="service" required></select></label><label>Seu nome<input id="name" required></label><div class="split"><label>Data<input id="date" type="date" required></label><label>Horário<input id="time" type="time" required></label></div><label>Observação<textarea id="obs"></textarea></label><div class="terms"><b>Termo de compromisso:</b><br>1. É necessário pagamento de 20% de sinal para confirmar o agendamento.<br>2. Cancelamentos devem ser avisados com 30 minutos de antecedência.<br>3. Em caso de falta sem aviso, não há reembolso do sinal.<br>4. Após 3 faltas, o cliente perde direito a agendamento com hora marcada.</div><div class="check"><input type="checkbox" id="terms" required><label for="terms">Li e concordo com o termo de compromisso.</label></div><button class="confirm" type="submit">Enviar agendamento pelo WhatsApp</button><div class="status" id="status"></div></form></section></main></div>
+<div class="modal" id="modal"><div class="box"><button class="close" id="closeBtn" type="button">×</button><div id="login"><h2>Relatório</h2><form id="loginForm"><label>Usuário<input id="user" required></label><label>Senha<input id="pass" type="password" required></label><p id="err" class="error">Usuário ou senha inválidos.</p><button class="confirm" type="submit">Acessar</button></form></div><div id="reportPanel" style="display:none"><h2>Agendamentos</h2><div class="dashboard" id="dashboard"><h3>Serviços concluídos neste mês</h3><div id="dashContent"></div></div><div id="report"></div></div></div></div>
+<script>
+(function(){
+'use strict';
+var PIX='00020126330014BR.GOV.BCB.PIX0111161879944425204000053039865802BR5919Luca Alves da Silva6009SAO PAULO62140510eRr6kjOS4B63048BBF';
+var WHATSAPP='5581989492224';
+var services=[['Barba',20,20,'Preço pode variar.'],['Cabelo + barba',45,45,'Aparação, modelagem e desenho da barba.'],['Corte',25,40,'Corte degradê e social.'],['Corte uma máquina só',20,20,'Preço pode variar.'],['Luzes/Reflexo',35,120,''],['Nevou',50,120,''],['Pigmentação',10,20,'']];
+var storageKey='adriano-agendamentos';
+var sel=document.getElementById('service'),cards=document.getElementById('cards');
+function money(v){return 'R$ '+v.toFixed(2).replace('.',',')}
+function mins(t){var a=t.split(':');return Number(a[0])*60+Number(a[1])}
+function get(){try{return JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(e){return []}}
+function put(v){localStorage.setItem(storageKey,JSON.stringify(v))}
+function show(text,ok){var x=document.getElementById('status');x.textContent=text;x.style.display='block';x.style.background=ok?'#dff7e6':'#ffe2e2';x.style.color=ok?'#155b2d':'#8b1515'}
+function formatDate(d){return new Date(d+'T12:00:00').toLocaleDateString('pt-BR')}
+function workingHours(date,time,duration){var day=new Date(date+'T12:00:00').getDay(),start=mins(time),end=start+duration;if(day===0)return false;if(day===1)return start>=mins('14:30')&&end<=mins('19:00');if(day===6)return(start>=mins('09:00')&&end<=mins('13:00'))||(start>=mins('15:00')&&end<=mins('19:00'));if(day===3)return(start>=mins('09:00')&&end<=mins('12:00'))||(start>=mins('15:00')&&end<=mins('19:00'));return(start>=mins('09:00')&&end<=mins('12:00'))||(start>=mins('14:30')&&end<=mins('19:00'))}
+function esc(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+sel.innerHTML='<option value="">Selecione</option>';
+services.forEach(function(s,i){var o=document.createElement('option');o.value=i;o.textContent=s[0]+' - '+money(s[1]);sel.appendChild(o);var card=document.createElement('div');card.className='service';card.innerHTML='<div style="display:flex;justify-content:space-between"><h3>'+esc(s[0])+'</h3><b class="price">'+money(s[1])+'</b></div><p class="desc">'+(s[2]>=60?s[2]/60+' h':s[2]+' min')+(s[3]?' - '+esc(s[3]):'')+'</p>';card.onclick=function(){document.querySelectorAll('.service').forEach(function(c){c.classList.remove('selected')});card.classList.add('selected');sel.value=i};cards.appendChild(card)});
+document.getElementById('date').min=new Date().toISOString().slice(0,10);
+document.getElementById('bookingForm').addEventListener('submit',function(e){e.preventDefault();var index=sel.value,name=document.getElementById('name').value.trim(),date=document.getElementById('date').value,time=document.getElementById('time').value,obs=document.getElementById('obs').value.trim()||'Nenhuma';if(index===''){show('Selecione um serviço.',false);return}if(!name||!date||!time){show('Preencha nome, data e horário.',false);return}if(!document.getElementById('terms').checked){show('Você precisa concordar com o termo.',false);return}var service=services[Number(index)],list=get();if(!workingHours(date,time,service[2])){show('Horário fora do expediente.',false);return}if(list.some(function(a){return a.date===date&&mins(time)<mins(a.time)+a.duration&&mins(time)+service[2]>mins(a.time)})){show('Este horário já está ocupado.',false);return}var signal=service[1]*.2,id=Date.now(),appt={id:id,name:name,date:date,time:time,service:service[0],valor:service[1],duration:service[2],obs:obs,sinal:signal,status:'pending'};list.push(appt);put(list);var msg1='Olá, Adriano Paulo Barbearia!
+
+*Novo agendamento*
+*Nome:* '+name+'
+*Serviço:* '+service[0]+'
+*Data:* '+formatDate(date)+'
+*Horário:* '+time+'
+*Valor total:* '+money(service[1])+'
+*Observação:* '+obs+'
+
+*Termo de compromisso:*
+- É necessário pagamento de 20% de sinal para confirmar o agendamento.
+- Cancelamentos devem ser avisados com 30 minutos de antecedência.
+- Em caso de falta sem aviso, não há reembolso do sinal.
+- Após 3 faltas, o cliente perde direito a agendamento com hora marcada.
+
+Li e concordo com o termo de compromisso.';var msg2='*PAGAMENTO DO SINAL*
+
+Para confirmar seu agendamento, realize o pagamento de 20% do serviço.
+
+*Valor do sinal: '+money(signal)+'*
+
+*Chave Pix:*
+'+PIX+'
+
+Após realizar o pagamento, envie o comprovante nesta conversa para confirmar o agendamento.';window.open('https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg1+'
+
+--------------------
+
+'+msg2),'_blank');show('Agendamento enviado. Faça o pagamento do sinal pelo WhatsApp.',true);this.reset();document.querySelectorAll('.service').forEach(function(c){c.classList.remove('selected')});sel.value=''});
+var modal=document.getElementById('modal');document.getElementById('menuBtn').onclick=function(){modal.classList.add('open')};document.getElementById('closeBtn').onclick=function(){modal.classList.remove('open')};modal.onclick=function(e){if(e.target===modal)modal.classList.remove('open')};
+function renderDashboard(){var now=new Date(),month=now.getMonth(),year=now.getFullYear(),data={};var total=0;get().forEach(function(a){var d=new Date(a.date+'T12:00:00');if(a.status==='done'&&d.getMonth()===month&&d.getFullYear()===year){if(!data[a.service])data[a.service]={qty:0,total:0};data[a.service].qty++;data[a.service].total+=Number(a.valor);total+=Number(a.valor)}});var keys=Object.keys(data),html='';keys.forEach(function(k){html+='<div class="dash-item"><span>'+esc(k)+' ('+data[k].qty+'x)</span><span>'+money(data[k].total)+'</span></div>'});if(!keys.length)html='<p class="empty">Nenhum serviço concluído neste mês.</p>';else html+='<div class="dash-total"><span>Total</span><span>'+money(total)+'</span></div>';document.getElementById('dashContent').innerHTML=html}
+function render(){var list=get().sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time)}),html='';if(!list.length)html='<p class="empty">Nenhum agendamento.</p>';list.forEach(function(a){html+='<div class="appt"><div class="appt-info"><b>'+esc(a.name)+'</b> - '+esc(a.service)+'<br>'+formatDate(a.date)+' '+esc(a.time)+'<br>Valor: '+money(Number(a.valor))+'<br>Sinal: '+money(Number(a.sinal))+'<br>Obs: '+esc(a.obs)+'</div><button class="badge '+(a.status==='done'?'done':'pending')+'" data-id="'+a.id+'" title="'+(a.status==='done'?'Concluído':'Pendente')+'"></button><button class="del" data-id="'+a.id+'">Excluir</button></div>'});document.getElementById('report').innerHTML=html;document.querySelectorAll('.badge').forEach(function(b){b.onclick=function(){var list=get(),id=Number(b.dataset.id);list.forEach(function(a){if(a.id===id)a.status=a.status==='done'?'pending':'done'});put(list);render()}});document.querySelectorAll('.del').forEach(function(b){b.onclick=function(){if(!confirm('Excluir este agendamento?'))return;put(get().filter(function(a){return a.id!==Number(b.dataset.id)}));render()}});renderDashboard()}
+document.getElementById('loginForm').addEventListener('submit',function(e){e.preventDefault();if(document.getElementById('user').value==='Adri@n08850'&&document.getElementById('pass').value==='ADR5529'){document.getElementById('login').style.display='none';document.getElementById('reportPanel').style.display='block';render()}else document.getElementById('err').style.display='block'});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
+})();
+</script></body></html>
