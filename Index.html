@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adriano Paulo Barbearia</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    body{background:#f6f3ee;color:#151515;padding:16px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    h1{font-size:20px;font-weight:600;color:#151515}
+    .menu-btn{background:none;border:none;font-size:24px;cursor:pointer;color:#151515}
+    .services{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
+    .service-card{background:#fff;border-radius:12px;padding:16px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+    .service-card:hover{border-color:#151515;transform:translateY(-2px)}
+    .service-card.selected{background:#151515;color:#fff}
+    .service-card h3{font-size:14px;margin-bottom:4px;font-weight:500}
+    .service-card p{font-size:12px;opacity:0.8}
+    .form-group{margin-bottom:16px}
+    label{display:block;font-size:12px;color:#666;margin-bottom:4px;font-weight:500}
+    input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fff}
+    input:focus,textarea:focus{outline:none;border-color:#151515}
+    .btn{width:100%;padding:14px;background:#151515;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+    .btn:disabled{background:#ccc;cursor:not-allowed}
+    .hidden{display:none}
+    #bookingSection{background:#fff;border-radius:12px;padding:16px;margin-bottom:24px}
+    #bookingSection h2{font-size:18px;margin-bottom:16px;color:#151515}
+    .back-btn{background:none;border:none;color:#151515;font-size:14px;cursor:pointer;margin-bottom:12px}
+    #adminPanel{background:#fff;border-radius:12px;padding:16px}
+    #adminPanel h2{font-size:18px;margin-bottom:16px}
+    .admin-item{border-bottom:1px solid #eee;padding:12px 0}
+    .admin-item:last-child{border-bottom:none}
+    .admin-item h3{font-size:14px;margin-bottom:4px}
+    .admin-item p{font-size:12px;color:#666}
+    .status{font-size:11px;padding:4px 8px;border-radius:4px;display:inline-block;margin-top:4px}
+    .status-pendente{background:#fff3cd;color:#856404}
+    .status-confirmado{background:#d4edda;color:#155724}
+    .status-concluido{background:#d1ecf1;color:#0c5460}
+    .status-cancelado{background:#f8d7da;color:#721c24}
+    .logout-btn{background:#dc3545;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer;margin-top:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Adriano Paulo</h1>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </header>
+
+  <div id="servicesSection">
+    <div class="services" id="servicesList"></div>
+  </div>
+
+  <div id="bookingSection" class="hidden">
+    <button class="back-btn" onclick="backToServices()">← Voltar</button>
+    <h2 id="selectedServiceTitle"></h2>
+    <div class="form-group">
+      <label>Seu nome</label>
+      <input type="text" id="clientName" placeholder="Digite seu nome">
+    </div>
+    <div class="form-group">
+      <label>Data</label>
+      <input type="date" id="bookingDate">
+    </div>
+    <div class="form-group">
+      <label>Horário</label>
+      <input type="time" id="bookingTime" min="09:00" max="19:00">
+    </div>
+    <div class="form-group">
+      <label>Observações (opcional)</label>
+      <textarea id="bookingNotes" rows="2" placeholder="Ex: barba cheia, cabelo na régua..."></textarea>
+    </div>
+    <button class="btn" onclick="sendToWhatsApp()">Enviar para WhatsApp</button>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+    <h2>Agendamentos</h2>
+    <div id="adminList"></div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+
+  <script>
+    const SERVICES=[
+      {id:1,name:'Corte de Cabelo',price:50},
+      {id:2,name:'Barba',price:30},
+      {id:3,name:'Cabelo + Barba',price:70},
+      {id:4,name:'Pezinho/Sombrancelha',price:15},
+      {id:5,name:'Corte Infantil',price:40},
+      {id:6,name:'Platinado',price:150},
+      {id:7,name:'Social',price:60},
+      {id:8,name:'Navalhado',price:60}
+    ];
+
+    let selectedService=null;
+    const PHONE='5511930962041';
+
+    function init(){
+      const servicesList=document.getElementById('servicesList');
+      servicesList.innerHTML='';
+      SERVICES.forEach(service=>{
+        const card=document.createElement('div');
+        card.className='service-card';
+        card.innerHTML=`<h3>${service.name}</h3><p>R$ ${service.price}</p>`;
+        card.onclick=()=>selectService(service);
+        servicesList.appendChild(card);
+      });
+      const today=new Date().toISOString().split('T')[0];
+      document.getElementById('bookingDate').min=today;
+    }
+
+    function selectService(service){
+      selectedService=service;
+      document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      document.getElementById('servicesSection').classList.add('hidden');
+      document.getElementById('bookingSection').classList.remove('hidden');
+      document.getElementById('selectedServiceTitle').textContent=service.name+' - R$ '+service.price;
+    }
+
+    function backToServices(){
+      selectedService=null;
+      document.getElementById('servicesSection').classList.remove('hidden');
+      document.getElementById('bookingSection').classList.add('hidden');
+      document.getElementById('clientName').value='';
+      document.getElementById('bookingDate').value='';
+      document.getElementById('bookingTime').value='';
+      document.getElementById('bookingNotes').value='';
+      document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('selected'));
+    }
+
+    function sendToWhatsApp(){
+      const name=document.getElementById('clientName').value.trim();
+      const date=document.getElementById('bookingDate').value;
+      const time=document.getElementById('bookingTime').value;
+      const notes=document.getElementById('bookingNotes').value.trim();
+      if(!name||!date||!time||!selectedService){alert('Preencha todos os campos!');return;}
+      
+      const id=Date.now().toString().slice(-6);
+      const booking={id,service:selectedService.name,price:selectedService.price,date,time,client:name,notes,status:'Pendente'};
+      const bookings=JSON.parse(localStorage.getItem('bookings')||'[]');
+      bookings.push(booking);
+      localStorage.setItem('bookings',JSON.stringify(bookings));
+
+      const msg1=`*NOVO AGENDAMENTO*%0A%0A*Cliente:* ${name}%0A*Serviço:* ${selectedService.name}%0A*Valor:* R$ ${selectedService.price}%0A*Data:* ${date.split('-').reverse().join('/')}%0A*Horário:* ${time}%0A${notes?`*Obs:* ${notes}`:''}`;
+      const msg2=`Olá ${name}! Seu agendamento para ${selectedService.name} dia ${date.split('-').reverse().join('/')} às ${time} foi recebido. Em breve confirmaremos!`;
+      
+      window.open(`https://wa.me/${PHONE}?text=${msg1}`,'_blank');
+      setTimeout(()=>{window.open(`https://wa.me/${PHONE}?text=${msg2}`,'_blank');},500);
+      
+      alert('Agendamento enviado!');
+      backToServices();
+    }
+
+    function toggleMenu(){
+      const adminPanel=document.getElementById('adminPanel');
+      const servicesSection=document.getElementById('servicesSection');
+      const bookingSection=document.getElementById('bookingSection');
+      
+      if(adminPanel.classList.contains('hidden')){
+        const user=prompt('Usuário:');
+        const pass=prompt('Senha:');
+        if(user==='Adri@n08850'&&pass==='ADR5529'){
+          adminPanel.classList.remove('hidden');
+          servicesSection.classList.add('hidden');
+          bookingSection.classList.add('hidden');
+          loadAdmin();
+        }else{alert('Dados incorretos!');}
+      }else{
+        adminPanel.classList.add('hidden');
+        servicesSection.classList.remove('hidden');
+      }
+    }
+
+    function loadAdmin(){
+      const bookings=JSON.parse(localStorage.getItem('bookings')||'[]').sort((a,b)=>new Date(b.date+' '+b.time)-new Date(a.date+' '+a.time));
+      const list=document.getElementById('adminList');
+      list.innerHTML='';
+      if(bookings.length===0){list.innerHTML='<p style="color:#666;text-align:center;padding:20px;">Nenhum agendamento</p>';return;}
+      bookings.forEach(b=>{
+        const item=document.createElement('div');
+        item.className='admin-item';
+        const statusClass='status-'+b.status.toLowerCase();
+        item.innerHTML=`<h3>${b.client} - ${b.service}</h3><p>${b.date.split('-').reverse().join('/')} às ${b.time} | R$ ${b.price}</p><span class="status ${statusClass}">${b.status}</span>`;
+        list.appendChild(item);
+      });
+    }
+
+    function logout(){
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('servicesSection').classList.remove('hidden');
+    }
+
+    init();
+  </script>
+</body>
+</html>
