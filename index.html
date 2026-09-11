@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adriano Paulo Barbearia</title>
+  <style>
+    body{font-family:Arial,sans-serif;padding:20px;background:#f6f3ee}
+    h1{color:#151515}
+    .servico{background:#fff;padding:15px;margin:10px 0;border-radius:8px;cursor:pointer}
+    .servico:hover{background:#151515;color:#fff}
+  </style>
+</head>
+<body>
+  <h1>Adriano Paulo Barbearia</h1>
+  <div id="lista"></div>
+
+  <script>
+    var servicos=[
+      {nome:'Corte de Cabelo',preco:50},
+      {nome:'Barba',preco:30},
+      {nome:'Cabelo + Barba',preco:70},
+      {nome:'Pezinho',preco:15}
+    ];
+
+    var lista=document.getElementById('lista');
+    
+    for(var i=0;i<servicos.length;i++){
+      var card=document.createElement('div');
+      card.className='servico';
+      card.innerHTML=servicos[i].nome+' - R$ '+servicos[i].preco;
+      lista.appendChild(card);
+    }
+  </script>
+</body>
+</html>
