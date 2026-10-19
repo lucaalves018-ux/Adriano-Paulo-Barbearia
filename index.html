@@ -3,238 +3,1018 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adriano Paulo Barbearia</title>
-  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Adriano Paulo Barbearia. Agende seu horário com estilo, qualidade e precisão.">
+  <title>Adriano Paulo | Barbearia</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png">
+
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-    body{background:#f6f3ee;color:#151515;padding:16px}
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-    h1{font-size:20px;font-weight:600;color:#151515}
-    .menu-btn{background:none;border:none;font-size:24px;cursor:pointer;color:#151515}
-    .dashboard{background:#fff;border-radius:12px;padding:16px;margin-bottom:24px}
-    .dashboard h2{font-size:16px;margin-bottom:12px;color:#151515}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .stat{background:#f8f8f8;border-radius:8px;padding:12px;text-align:center}
-    .stat-value{font-size:24px;font-weight:700;color:#151515}
-    .stat-label{font-size:11px;color:#666;margin-top:4px}
-    .services{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px}
-    .service-card{background:#fff;border-radius:12px;padding:16px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
-    .service-card:hover{border-color:#C9A227;transform:translateY(-2px)}
-    .service-card.selected{background:#151515;color:#C9A227;border-color:#C9A227}
-    .service-card h3{font-size:14px;margin-bottom:4px;font-weight:500}
-    .service-card p{font-size:12px;opacity:0.8}
-    .form-group{margin-bottom:16px}
-    label{display:block;font-size:12px;color:#666;margin-bottom:4px;font-weight:500}
-    input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fff}
-    input:focus,textarea:focus{outline:none;border-color:#C9A227}
-    .btn{width:100%;padding:14px;background:#C9A227;color:#151515;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px}
-    .btn:disabled{background:#ccc;cursor:not-allowed}
-    .hidden{display:none}
-    #bookingSection{background:#fff;border-radius:12px;padding:16px;margin-bottom:24px}
-    #bookingSection h2{font-size:18px;margin-bottom:16px;color:#151515}
-    .back-btn{background:none;border:none;color:#151515;font-size:14px;cursor:pointer;margin-bottom:12px}
-    #adminPanel{background:#fff;border-radius:12px;padding:16px}
-    #adminPanel h2{font-size:18px;margin-bottom:16px}
-    .admin-item{border-bottom:1px solid #eee;padding:12px 0}
-    .admin-item:last-child{border-bottom:none}
-    .admin-item h3{font-size:14px;margin-bottom:4px}
-    .admin-item p{font-size:12px;color:#666}
-    .status{font-size:11px;padding:4px 8px;border-radius:4px;display:inline-block;margin-top:4px}
-    .status-pendente{background:#fff3cd;color:#856404}
-    .status-confirmado{background:#d4edda;color:#155724}
-    .status-concluido{background:#d1ecf1;color:#0c5460}
-    .status-cancelado{background:#f8d7da;color:#721c24}
-    .logout-btn{background:#dc3545;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer;margin-top:12px}
-    .refresh-btn{background:#C9A227;color:#151515;border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;margin-left:8px}
+    :root {
+      color-scheme: dark;
+      --black: #080808;
+      --panel: #141414;
+      --panel2: #1b1b1b;
+      --gold: #d4af37;
+      --gold-light: #f2d675;
+      --white: #f7f4ed;
+      --muted: #b9b5ab;
+      --border: #393326;
+      --danger: #ff7272;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    header {
+      background: rgba(8,8,8,.97);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      line-height: 1.25;
+    }
+
+    .brand-name span {
+      display: block;
+      margin-top: 4px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: #090909;
+    }
+
+    .btn-gold:hover { filter: brightness(1.08); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-light);
+    }
+
+    .btn-outline:hover { background: #211c0e; }
+
+    .hero {
+      padding: 76px 0 64px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at top, rgba(212,175,55,.12), transparent 60%),
+        var(--black);
+    }
+
+    .eyebrow {
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 16px auto;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      max-width: 600px;
+      margin: 18px auto 26px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    section { padding: 58px 0; }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      margin: 8px 0;
+      font-size: clamp(25px, 4vw, 36px);
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .service-card {
+      background: linear-gradient(145deg, #191919, #101010);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 23px 20px;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+      color: var(--white);
+      transition: transform .2s, border-color .2s, background .2s;
+    }
+
+    .service-card:hover,
+    .service-card.selected {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      background: #1d1a12;
+    }
+
+    .service-number {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: 800;
+    }
+
+    .service-card h3 {
+      color: var(--white);
+      font-size: 19px;
+      margin: 10px 0 4px;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 17px;
+    }
+
+    .service-price {
+      color: var(--gold-light);
+      font-weight: 800;
+      font-size: 25px;
+    }
+
+    .booking-section {
+      background: #101010;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .booking-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 35px;
+      align-items: start;
+    }
+
+    .booking-info h2 {
+      font-size: 32px;
+      line-height: 1.2;
+      margin: 8px 0 15px;
+    }
+
+    .booking-info h2 span { color: var(--gold); }
+
+    .booking-info p { color: var(--muted); }
+
+    .info-line {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--white);
+    }
+
+    .info-line strong { color: var(--gold-light); }
+
+    .form-card {
+      padding: 25px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .form-card h3 {
+      margin: 0 0 20px;
+      font-size: 23px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: #090909;
+      color: var(--white);
+      border: 1px solid #454035;
+      border-radius: 8px;
+      padding: 12px;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 85px;
+    }
+
+    .selected-service {
+      margin: 0 0 18px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: #0a0a0a;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .selected-service strong { color: var(--gold-light); }
+
+    .form-card .btn {
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    .notice {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .admin-section {
+      background: #0c0c0c;
+      border-top: 1px solid var(--border);
+    }
+
+    .hidden { display: none !important; }
+
+    .admin-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .admin-top h2 { margin: 0; }
+
+    .admin-top p {
+      color: var(--muted);
+      margin: 4px 0 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 28px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat-value {
+      color: var(--gold-light);
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .bookings-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .booking-item {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 17px;
+    }
+
+    .booking-item h4 { margin: 0 0 8px; }
+
+    .booking-item p {
+      margin: 4px 0;
+      color: var(--muted);
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .booking-item strong { color: var(--gold-light); }
+
+    .booking-item select {
+      margin-top: 12px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      background: #080808;
+      color: var(--white);
+      border-radius: 7px;
+    }
+
+    .empty-state {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .status-message {
+      font-size: 13px;
+      color: var(--gold-light);
+      margin-top: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--gold-light); }
+
+    @media (max-width: 760px) {
+      .nav { min-height: 72px; }
+      .logo { width: 47px; height: 47px; }
+      .brand-name { font-size: 14px; }
+      .brand-name span { font-size: 9px; letter-spacing: 2px; }
+      .nav-actions { gap: 6px; }
+      .nav-actions .btn { padding: 9px 10px; font-size: 12px; }
+      .hero { padding: 58px 0 48px; }
+      section { padding: 43px 0; }
+      .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+      .service-card { padding: 17px 14px; }
+      .service-card h3 { font-size: 16px; }
+      .service-card p { font-size: 12px; }
+      .service-price { font-size: 22px; }
+      .booking-layout { grid-template-columns: 1fr; gap: 23px; }
+      .booking-info h2 { font-size: 28px; }
+      .form-card { padding: 18px; }
+      .stats { gap: 8px; }
+      .stat { padding: 13px 10px; }
+      .stat-label { font-size: 11px; }
+      .stat-value { font-size: 25px; }
+    }
+
+    @media (max-width: 390px) {
+      .brand { gap: 7px; }
+      .brand-name { font-size: 12px; }
+      .nav-actions .btn { padding: 8px; font-size: 11px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+    }
   </style>
 </head>
+
 <body>
   <header>
-    <h1>Adriano Paulo</h1>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-  </header>
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="Adriano Paulo Barbearia - início">
+        <img class="logo" src="./logo.png" alt="Logo Adriano Paulo"
+             onerror="this.style.display='none'">
+        <div class="brand-name">
+          ADRIANO PAULO
+          <span>BARBEARIA</span>
+        </div>
+      </a>
 
-  <div id="dashboardSection">
-    <div class="dashboard">
-      <h2>Resumo</h2>
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-value" id="totalBookings">0</div>
-          <div class="stat-label">Total</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="todayBookings">0</div>
-          <div class="stat-label">Hoje</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="pendingBookings">0</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="#servicos">Serviços</a>
+        <button class="btn btn-gold" id="adminAccess" type="button">
+          Área ADM
+        </button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <div id="servicesSection">
-    <div class="services" id="servicesList"></div>
-  </div>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container">
+        <div class="eyebrow">Estilo • Precisão • Personalidade</div>
+        <h1>Seu estilo,<br><span>nossa assinatura.</span></h1>
+        <p>
+          Mais do que um corte: cuidado com os detalhes, personalidade
+          e um visual feito para você.
+        </p>
+        <a class="btn btn-gold" href="#agendamento">Agendar meu horário</a>
+      </div>
+    </section>
 
-  <div id="bookingSection" class="hidden">
-    <button class="back-btn" onclick="backToServices()">← Voltar</button>
-    <h2 id="selectedServiceTitle"></h2>
-    <div class="form-group">
-      <label>Seu nome</label>
-      <input type="text" id="clientName" placeholder="Digite seu nome">
-    </div>
-    <div class="form-group">
-      <label>Data</label>
-      <input type="date" id="bookingDate">
-    </div>
-    <div class="form-group">
-      <label>Horário</label>
-      <input type="time" id="bookingTime" min="09:00" max="19:00">
-    </div>
-    <div class="form-group">
-      <label>Observações (opcional)</label>
-      <textarea id="bookingNotes" rows="2" placeholder="Ex: barba cheia, cabelo na régua..."></textarea>
-    </div>
-    <button class="btn" onclick="sendToWhatsApp()">Enviar para WhatsApp</button>
-  </div>
+    <section id="servicos">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Nosso trabalho</div>
+          <h2>Serviços <span style="color:var(--gold)">em destaque</span></h2>
+          <p>Escolha seu serviço e confira o valor.</p>
+        </div>
 
-  <div id="adminPanel" class="hidden">
-    <h2>Agendamentos <button class="refresh-btn" onclick="loadAdmin()">Atualizar</button></h2>
-    <div id="adminList"></div>
-    <button class="logout-btn" onclick="logout()">Sair</button>
-  </div>
+        <div class="services-grid" id="servicesGrid"></div>
+      </div>
+    </section>
+
+    <section class="booking-section" id="agendamento">
+      <div class="container booking-layout">
+        <div class="booking-info">
+          <div class="eyebrow">Seu próximo visual começa aqui</div>
+          <h2>Reserve seu <span>horário.</span></h2>
+          <p>
+            Preencha os dados do agendamento. Ao continuar, você poderá
+            confirmar as informações pelo WhatsApp.
+          </p>
+
+          <div class="info-line">✦ <strong>Atendimento:</strong> com agendamento</div>
+          <div class="info-line">✦ <strong>Qualidade:</strong> atenção aos detalhes</div>
+          <div class="info-line">✦ <strong>Estilo:</strong> pensado para você</div>
+        </div>
+
+        <form class="form-card" id="bookingForm">
+          <h3>Agendar atendimento</h3>
+
+          <div class="selected-service" id="selectedService">
+            Serviço escolhido: <strong>Selecione um serviço abaixo ou no formulário.</strong>
+          </div>
+
+          <div class="form-grid">
+            <div class="field full">
+              <label for="clientName">Nome completo</label>
+              <input id="clientName" name="name" type="text"
+                     maxlength="100" autocomplete="name" required
+                     placeholder="Digite seu nome">
+            </div>
+
+            <div class="field full">
+              <label for="service">Serviço</label>
+              <select id="service" name="service" required>
+                <option value="">Selecione um serviço</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="date">Data</label>
+              <input id="date" name="date" type="date" required>
+            </div>
+
+            <div class="field">
+              <label for="time">Horário desejado</label>
+              <input id="time" name="time" type="time" required>
+            </div>
+
+            <div class="field full">
+              <label for="notes">Observações (opcional)</label>
+              <textarea id="notes" name="notes" maxlength="500"
+                        placeholder="Algum detalhe sobre o atendimento?"></textarea>
+            </div>
+          </div>
+
+          <button class="btn btn-gold" type="submit">
+            Continuar pelo WhatsApp
+          </button>
+
+          <p class="notice">
+            O envio pelo WhatsApp não significa confirmação automática.
+            Aguarde a resposta da barbearia.
+          </p>
+          <div class="status-message" id="bookingMessage" role="status"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- A área administrativa inteira fica oculta até autenticação válida. -->
+    <section class="admin-section hidden" id="adminPanel">
+      <div class="container">
+        <div class="admin-top">
+          <div>
+            <div class="eyebrow">Acesso restrito</div>
+            <h2>Painel administrativo</h2>
+            <p>Resumo e gerenciamento de agendamentos.</p>
+          </div>
+          <button class="btn btn-outline" id="adminLogout" type="button">
+            Sair do ADM
+          </button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Total de agendamentos</div>
+            <div class="stat-value" id="totalBookings">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Agendamentos de hoje</div>
+            <div class="stat-value" id="todayBookings">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Pendentes</div>
+            <div class="stat-value" id="pendingBookings">0</div>
+          </div>
+        </div>
+
+        <div class="admin-top">
+          <div>
+            <h2>Agendamentos</h2>
+            <p>Dados obtidos do servidor administrativo.</p>
+          </div>
+          <button class="btn btn-outline" id="refreshBookings" type="button">
+            Atualizar lista
+          </button>
+        </div>
+
+        <div id="adminMessage" class="status-message" role="status"></div>
+        <div class="bookings-list" id="bookingsList">
+          <div class="empty-state">
+            Entre no painel para consultar os agendamentos.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>ADRIANO PAULO BARBEARIA</strong>
+      <div>Estilo e precisão em cada detalhe.</div>
+      <div>© <span id="year"></span> Todos os direitos reservados.</div>
+    </div>
+  </footer>
 
   <script>
-    const SERVICES=[
-      {id:1,name:'Corte de Cabelo',price:50},
-      {id:2,name:'Barba',price:30},
-      {id:3,name:'Cabelo + Barba',price:70},
-      {id:4,name:'Pezinho/Sombrancelha',price:15},
-      {id:5,name:'Corte Infantil',price:40},
-      {id:6,name:'Platinado',price:150},
-      {id:7,name:'Social',price:60},
-      {id:8,name:'Navalhado',price:60}
+    /*
+      CONFIGURAÇÃO:
+      Quando o backend estiver publicado em uma URL HTTPS, coloque essa URL
+      entre as aspas abaixo, sem a barra final.
+
+      Exemplo de formato: https://seu-backend.example.com
+
+      Não use 127.0.0.1 ou localhost aqui para um site publicado:
+      esses endereços apontam para o dispositivo de cada visitante.
+    */
+    const API_BASE = "";
+
+    const WHATSAPP_NUMBER = "5511930962041";
+
+    const SERVICES = [
+      { name: "Corte de Cabelo", price: 50, description: "Corte com acabamento cuidadoso." },
+      { name: "Barba", price: 30, description: "Alinhamento e cuidado com a barba." },
+      { name: "Cabelo + Barba", price: 70, description: "Um visual completo." },
+      { name: "Pezinho / Sombrancelha", price: 15, description: "Acabamento e definição." },
+      { name: "Corte Infantil", price: 40, description: "Cuidado e estilo para os pequenos." },
+      { name: "Platinado", price: 150, description: "Transformação de visual." },
+      { name: "Social", price: 60, description: "Estilo social bem definido." },
+      { name: "Navalhado", price: 60, description: "Acabamento marcado e preciso." }
     ];
 
-    let selectedService=null;
-    const PHONE='5511930962041';
+    const $ = (id) => document.getElementById(id);
 
-    function init(){
-      const servicesList=document.getElementById('servicesList');
-      servicesList.innerHTML='';
-      SERVICES.forEach(service=>{
-        const card=document.createElement('div');
-        card.className='service-card';
-        card.innerHTML='<h3>'+service.name+'</h3><p>R$ '+service.price+'</p>';
-        card.onclick=function(){selectService(service);};
-        servicesList.appendChild(card);
+    let adminToken = null;
+    let adminBookings = [];
+
+    function money(value) {
+      return Number(value || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
       });
-      const today=new Date().toISOString().split('T')[0];
-      document.getElementById('bookingDate').min=today;
-      updateDashboard();
     }
 
-    function updateDashboard(){
-      const bookings=JSON.parse(localStorage.getItem('bookings')||'[]');
-      const today=new Date().toISOString().split('T')[0];
-      const todayCount=bookings.filter(b=>b.date===today).length;
-      const pendingCount=bookings.filter(b=>b.status==='Pendente').length;
-      document.getElementById('totalBookings').textContent=bookings.length;
-      document.getElementById('todayBookings').textContent=todayCount;
-      document.getElementById('pendingBookings').textContent=pendingCount;
+    function localDateString() {
+      const now = new Date();
+      const offset = now.getTimezoneOffset();
+      return new Date(now.getTime() - offset * 60000)
+        .toISOString().slice(0, 10);
     }
 
-    function selectService(service){
-      selectedService=service;
-      document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected');});
-      event.currentTarget.classList.add('selected');
-      document.getElementById('servicesSection').classList.add('hidden');
-      document.getElementById('bookingSection').classList.remove('hidden');
-      document.getElementById('selectedServiceTitle').textContent=service.name+' - R$ '+service.price;
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
     }
 
-    function backToServices(){
-      selectedService=null;
-      document.getElementById('servicesSection').classList.remove('hidden');
-      document.getElementById('bookingSection').classList.add('hidden');
-      document.getElementById('clientName').value='';
-      document.getElementById('bookingDate').value='';
-      document.getElementById('bookingTime').value='';
-      document.getElementById('bookingNotes').value='';
-      document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected');});
+    function renderServices() {
+      $("servicesGrid").innerHTML = SERVICES.map((service, index) => `
+        <button class="service-card" type="button"
+                data-service="${escapeHTML(service.name)}">
+          <div class="service-number">SERVIÇO ${String(index + 1).padStart(2, "0")}</div>
+          <h3>${escapeHTML(service.name)}</h3>
+          <p>${escapeHTML(service.description)}</p>
+          <div class="service-price">${money(service.price)}</div>
+        </button>
+      `).join("");
+
+      $("service").innerHTML =
+        '<option value="">Selecione um serviço</option>' +
+        SERVICES.map(service =>
+          `<option value="${escapeHTML(service.name)}">${escapeHTML(service.name)} — ${money(service.price)}</option>`
+        ).join("");
     }
 
-    function sendToWhatsApp(){
-      const name=document.getElementById('clientName').value.trim();
-      const date=document.getElementById('bookingDate').value;
-      const time=document.getElementById('bookingTime').value;
-      const notes=document.getElementById('bookingNotes').value.trim();
-      if(!name||!date||!time||!selectedService){alert('Preencha todos os campos!');return;}
-      
-      const id=Date.now().toString().slice(-6);
-      const booking={id:id,service:selectedService.name,price:selectedService.price,date:date,time:time,client:name,notes:notes,status:'Pendente'};
-      const bookings=JSON.parse(localStorage.getItem('bookings')||'[]');
-      bookings.push(booking);
-      localStorage.setItem('bookings',JSON.stringify(bookings));
+    function updateSelectedService() {
+      const name = $("service").value;
+      const service = SERVICES.find(item => item.name === name);
 
-      const msg1='*NOVO AGENDAMENTO*%0A%0A*Cliente:* '+name+'%0A*Serviço:* '+selectedService.name+'%0A*Valor:* R$ '+selectedService.price+'%0A*Data:* '+date.split('-').reverse().join('/')+'%0A*Horário:* '+time+(notes?'%0A*Obs:* '+notes:'');
-      const msg2='Olá '+name+'! Seu agendamento para '+selectedService.name+' dia '+date.split('-').reverse().join('/')+' às '+time+' foi recebido. Em breve confirmaremos!';
-      
-      window.open('https://wa.me/'+PHONE+'?text='+msg1,'_blank');
-      setTimeout(function(){window.open('https://wa.me/'+PHONE+'?text='+msg2,'_blank');},500);
-      
-      alert('Agendamento enviado!');
-      updateDashboard();
-      backToServices();
+      document.querySelectorAll(".service-card").forEach(card => {
+        card.classList.toggle("selected", card.dataset.service === name);
+      });
+
+      $("selectedService").innerHTML = service
+        ? `Serviço escolhido: <strong>${escapeHTML(service.name)} — ${money(service.price)}</strong>`
+        : 'Serviço escolhido: <strong>Selecione um serviço abaixo ou no formulário.</strong>';
     }
 
-    function toggleMenu(){
-      const adminPanel=document.getElementById('adminPanel');
-      const dashboardSection=document.getElementById('dashboardSection');
-      const servicesSection=document.getElementById('servicesSection');
-      const bookingSection=document.getElementById('bookingSection');
-      
-      if(adminPanel.classList.contains('hidden')){
-        const user=prompt('Usuário:');
-        const pass=prompt('Senha:');
-        if(user==='Adri@n08850'&&pass==='ADR5529'){
-          adminPanel.classList.remove('hidden');
-          dashboardSection.classList.add('hidden');
-          servicesSection.classList.add('hidden');
-          bookingSection.classList.add('hidden');
-          loadAdmin();
-        }else{alert('Dados incorretos!');}
-      }else{
-        adminPanel.classList.add('hidden');
-        dashboardSection.classList.remove('hidden');
-        servicesSection.classList.remove('hidden');
+    $("servicesGrid").addEventListener("click", (event) => {
+      const card = event.target.closest("[data-service]");
+      if (!card) return;
+
+      $("service").value = card.dataset.service;
+      updateSelectedService();
+      $("agendamento").scrollIntoView({ behavior: "smooth" });
+    });
+
+    $("service").addEventListener("change", updateSelectedService);
+
+    $("date").min = localDateString();
+    $("year").textContent = new Date().getFullYear();
+
+    renderServices();
+
+    $("bookingForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = $("clientName").value.trim();
+      const serviceName = $("service").value;
+      const date = $("date").value;
+      const time = $("time").value;
+      const notes = $("notes").value.trim();
+      const service = SERVICES.find(item => item.name === serviceName);
+
+      if (!name || !service || !date || !time) {
+        $("bookingMessage").textContent =
+          "Preencha seu nome, serviço, data e horário.";
+        return;
+      }
+
+      if (date < localDateString()) {
+        $("bookingMessage").textContent =
+          "Escolha uma data igual ou posterior a hoje.";
+        return;
+      }
+
+      const booking = {
+        client: name,
+        name,
+        service: service.name,
+        price: service.price,
+        date,
+        time,
+        notes,
+        status: "Pendente"
+      };
+
+      /*
+        Se o backend HTTPS estiver configurado, tenta registrar o pedido.
+        O link do WhatsApp continua disponível para o cliente.
+      */
+      if (API_BASE) {
+        try {
+          const response = await fetch(`${API_BASE}/api/bookings`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(booking)
+          });
+
+          if (!response.ok) {
+            $("bookingMessage").textContent =
+              "Não foi possível registrar no servidor. Você ainda pode enviar pelo WhatsApp.";
+          }
+        } catch (error) {
+          $("bookingMessage").textContent =
+            "Servidor indisponível no momento. Você ainda pode enviar pelo WhatsApp.";
+        }
+      } else {
+        $("bookingMessage").textContent =
+          "O servidor ainda não está conectado. Envie o pedido pelo WhatsApp para solicitar o agendamento.";
+      }
+
+      const message = [
+        "Olá! Gostaria de solicitar um agendamento na Adriano Paulo Barbearia.",
+        "",
+        `Nome: ${name}`,
+        `Serviço: ${service.name}`,
+        `Valor: ${money(service.price)}`,
+        `Data: ${date.split("-").reverse().join("/")}`,
+        `Horário desejado: ${time}`,
+        notes ? `Observações: ${notes}` : "",
+        "",
+        "Aguardo a confirmação do horário."
+      ].filter(Boolean).join("\n");
+
+      const whatsappURL =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      window.open(whatsappURL, "_blank", "noopener,noreferrer");
+    });
+
+    async function apiRequest(path, options = {}) {
+      if (!API_BASE) {
+        throw new Error(
+          "O backend ainda não foi configurado. Publique o servidor em HTTPS e informe a URL em API_BASE."
+        );
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      };
+
+      if (adminToken) {
+        headers.Authorization = `Bearer ${adminToken}`;
+      }
+
+      const response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || `Erro HTTP ${response.status}`);
+      }
+
+      return data;
+    }
+
+    async function loginAdmin() {
+      if (!API_BASE) {
+        alert(
+          "A área administrativa precisa do backend publicado em HTTPS.\n\n" +
+          "Não é seguro colocar usuário e senha no index.html público."
+        );
+        return;
+      }
+
+      const username = prompt("Usuário do administrador:");
+      if (username === null || !username.trim()) return;
+
+      const password = prompt("Senha do administrador:");
+      if (password === null || !password) return;
+
+      try {
+        const data = await apiRequest("/api/admin/login", {
+          method: "POST",
+          body: JSON.stringify({
+            username: username.trim(),
+            password
+          })
+        });
+
+        if (!data.token) {
+          throw new Error("O servidor não retornou um token de acesso.");
+        }
+
+        adminToken = data.token;
+        $("adminPanel").classList.remove("hidden");
+        $("adminMessage").textContent = "Acesso autorizado.";
+        await loadAdminBookings();
+        $("adminPanel").scrollIntoView({ behavior: "smooth" });
+      } catch (error) {
+        adminToken = null;
+        $("adminPanel").classList.add("hidden");
+        alert("Não foi possível entrar no painel: " + error.message);
       }
     }
 
-    function loadAdmin(){
-      const bookings=JSON.parse(localStorage.getItem('bookings')||'[]').sort(function(a,b){return new Date(b.date+' '+b.time)-new Date(a.date+' '+a.time);});
-      const list=document.getElementById('adminList');
-      list.innerHTML='';
-      if(bookings.length===0){list.innerHTML='<p style="color:#666;text-align:center;padding:20px;">Nenhum agendamento</p>';return;}
-      bookings.forEach(function(b){
-        const item=document.createElement('div');
-        item.className='admin-item';
-        const statusClass='status-'+b.status.toLowerCase();
-        item.innerHTML='<h3>'+b.client+' - '+b.service+'</h3><p>'+b.date.split('-').reverse().join('/')+' às '+b.time+' | R$ '+b.price+'</p><span class="status '+statusClass+'">'+b.status+'</span>';
-        list.appendChild(item);
+    function updateAdminStats() {
+      const today = localDateString();
+
+      $("totalBookings").textContent = adminBookings.length;
+
+      $("todayBookings").textContent = adminBookings.filter(booking =>
+        String(booking.date || "").slice(0, 10) === today
+      ).length;
+
+      $("pendingBookings").textContent = adminBookings.filter(booking =>
+        String(booking.status || "Pendente").toLowerCase() === "pendente"
+      ).length;
+    }
+
+    function renderAdminBookings() {
+      if (!adminBookings.length) {
+        $("bookingsList").innerHTML =
+          '<div class="empty-state">Nenhum agendamento encontrado no servidor.</div>';
+        return;
+      }
+
+      $("bookingsList").innerHTML = adminBookings.map(booking => {
+        const id = booking.id;
+        const status = booking.status || "Pendente";
+
+        return `
+          <article class="booking-item">
+            <h4>${escapeHTML(booking.client || booking.name || "Cliente")}</h4>
+            <p>Serviço: <strong>${escapeHTML(booking.service || "—")}</strong></p>
+            <p>Valor: <strong>${money(booking.price)}</strong></p>
+            <p>Data: ${escapeHTML(booking.date || "—")} às ${escapeHTML(booking.time || "—")}</p>
+            <p>Observações: ${escapeHTML(booking.notes || "Nenhuma")}</p>
+            <p>Estado atual: <strong>${escapeHTML(status)}</strong></p>
+            <label>
+              Atualizar estado:
+              <select data-booking-id="${escapeHTML(id)}" class="booking-status">
+                ${["Pendente", "Confirmado", "Concluído", "Cancelado"].map(option =>
+                  `<option value="${option}" ${option.toLowerCase() === String(status).toLowerCase() ? "selected" : ""}>${option}</option>`
+                ).join("")}
+              </select>
+            </label>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadAdminBookings() {
+      $("adminMessage").textContent = "Carregando agendamentos…";
+
+      try {
+        const data = await apiRequest("/api/admin/bookings");
+        adminBookings = Array.isArray(data.bookings) ? data.bookings : [];
+        updateAdminStats();
+        renderAdminBookings();
+        $("adminMessage").textContent = "Lista atualizada.";
+      } catch (error) {
+        $("adminMessage").textContent = error.message;
+        if (/401|403|autorizado|token/i.test(error.message)) {
+          adminToken = null;
+          $("adminPanel").classList.add("hidden");
+        }
+      }
+    }
+
+    $("adminAccess").addEventListener("click", loginAdmin);
+
+    $("refreshBookings").addEventListener("click", () => {
+      if (adminToken) loadAdminBookings();
+    });
+
+    $("adminLogout").addEventListener("click", () => {
+      adminToken = null;
+      adminBookings = [];
+      $("adminPanel").classList.add("hidden");
+      $("bookingsList").innerHTML =
+        '<div class="empty-state">Entre no painel para consultar os agendamentos.</div>';
+      $("totalBookings").textContent = "0";
+      $("todayBookings").textContent = "0";
+      $("pendingBookings").textContent = "0";
+      $("adminMessage").textContent = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    $("bookingsList").addEventListener("change", async (event) => {
+      const select = event.target.closest(".booking-status");
+      if (!select || !adminToken) return;
+
+      const id = select.dataset.bookingId;
+      const status = select.value;
+
+      if (!id || id === "undefined") {
+        $("adminMessage").textContent =
+          "Este agendamento não possui um identificador válido.";
+        return;
+      }
+
+      select.disabled = true;
+      $("adminMessage").textContent = "Atualizando estado…";
+
+      try {
+        await apiRequest(`/api/admin/bookings/${encodeURIComponent(id)}/status`, {
+          method: "PATCH",
+          body: JSON.stringify({ status })
+        });
+
+        $("adminMessage").textContent = "Estado atualizado.";
+        await loadAdminBookings();
+      } catch (error) {
+        $("adminMessage").textContent =
+          "Não foi possível atualizar: " + error.message;
+        await loadAdminBookings();
+      } finally {
+        select.disabled = false;
+      }
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
       });
     }
-
-    function logout(){
-      document.getElementById('adminPanel').classList.add('hidden');
-      document.getElementById('dashboardSection').classList.remove('hidden');
-      document.getElementById('servicesSection').classList.remove('hidden');
-      updateDashboard();
-    }
-
-    init();
   </script>
 </body>
 </html>
