@@ -1,4 +1,4 @@
-const CACHE_NAME='adriano-barbearia-v3';
+const CACHE_NAME='adriano-barbearia-v6';
 const ASSETS=['./','./index.html','./manifest.json','./logo.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))
