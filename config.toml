@@ -1,0 +1,6 @@
+[functions.staff-login]
+verify_jwt = false
+[functions.create-booking]
+verify_jwt = true
+[functions.sync-calendar]
+verify_jwt = true
