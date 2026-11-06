@@ -7,7 +7,7 @@ Deno.serve(async(request:Request)=>{
     const {username,password}=await request.json();
     if(typeof username!=='string'||typeof password!=='string'||username.length>100||password.length>200)return json(request,{error:'Usuário ou senha incorretos.'},401);
     const svc=serviceDb();
-    const {data:account}=await svc.from('staff_accounts').select('user_id,email,role').eq('username',username.trim()).maybeSingle();
+    const {data:account}=await svc.from('ap_staff_accounts').select('user_id,email,role').eq('username',username.trim()).maybeSingle();
     if(!account)return json(request,{error:'Usuário ou senha incorretos.'},401);
     // Autenticação real com senha verificada pelo Supabase Auth; senha nunca é salva no index.html.
     const auth=createClient(config.url,config.publicKey,{auth:{persistSession:false}});
