@@ -339,7 +339,10 @@ function durationOf(items){return (items||[]).reduce((sum,s)=>sum+(Number(s.dura
 function overlaps(start,end,start2,end2){return start<end2 && start2<end}
 function openDate(d){return d && new Date(`${d}T12:00:00-03:00`).getUTCDay()!==0}
 function isDateInFuture(d){return d>=dateRecife()}
-function isTaken(day,start,duration){return appts().some(a=>{
+let apBlockedIntervals=[], apBlockedDay='', apAvailabilitySeq=0;
+function isTaken(day,start,duration){
+  if(CLOUD && apBlockedDay===day && apBlockedIntervals.some(([a,b])=>overlaps(start,start+duration,a,b)))return true;
+  return appts().some(a=>{
   if(a.date!==day || a.status==='Cancelado')return false;
   const aStart=minutes(a.time);const aEnd=aStart+(Number(a.duration)||durationOf(a.services));
   return overlaps(start,start+duration,aStart,aEnd);
@@ -391,12 +394,8 @@ function validate(){
   if(summary)summary.classList.toggle('hidden',!state.services.length);
   el('bookBtn').disabled=!(state.services.length&&state.date&&state.time&&isValidSlot(state.date,state.time,durationOf(state.services)));
 }
-function renderSlots(){
-  state.branch='Principal';state.pro=SOLO_BARBER;state.date=el('datePick').value;state.time='';
+function renderAvailableSlots(){
   const box=el('slots');box.replaceChildren();
-  if(!state.services.length||!state.date){box.textContent='Escolha os serviços e a data.';validate();return}
-  if(!isDateInFuture(state.date)){box.textContent='Selecione uma data válida a partir de hoje.';validate();return}
-  if(!openDate(state.date)){box.textContent='A barbearia não realiza atendimentos aos domingos.';validate();return}
   const dur=durationOf(state.services);let count=0;
   for(let minute=8*60;minute+dur<=20*60;minute+=15){
     const time=minuteLabel(minute),button=document.createElement('button');
@@ -409,6 +408,35 @@ function renderSlots(){
   updateStatus('scheduleNotice',count?`Horários livres: ${count}. Cada atendimento reserva a duração integral dos serviços.`:'Nenhum horário livre nesta data para a duração escolhida.');
   validate();
 }
+async function renderSlots(){
+  state.branch='Principal';state.pro=SOLO_BARBER;state.date=el('datePick').value;state.time='';
+  const box=el('slots');box.replaceChildren();
+  const sequence=++apAvailabilitySeq;
+  if(!state.services.length||!state.date){box.textContent='Escolha os serviços e a data.';validate();return}
+  if(!isDateInFuture(state.date)){box.textContent='Selecione uma data válida a partir de hoje.';validate();return}
+  if(!openDate(state.date)){box.textContent='A barbearia não realiza atendimentos aos domingos.';validate();return}
+  if(CLOUD){
+    apBlockedDay='';apBlockedIntervals=[];
+    box.textContent='Consultando horários disponíveis…';
+    el('bookBtn').disabled=true;
+    try{
+      const date=state.date;
+      const {data,error}=await db.functions.invoke('ap-availability',{body:{date}});
+      if(error||!data||!Array.isArray(data.blocked))throw Error(data?.error||'Falha na consulta de horários.');
+      if(sequence!==apAvailabilitySeq)return;
+      apBlockedDay=date;
+      apBlockedIntervals=data.blocked;
+    }catch(e){
+      if(sequence!==apAvailabilitySeq)return;
+      box.textContent='Não foi possível consultar a agenda. Tente novamente.';
+      updateStatus('scheduleNotice',e.message||'Agenda indisponível');
+      validate();return;
+    }
+  }
+  if(sequence!==apAvailabilitySeq)return;
+  renderAvailableSlots();
+}
+
 async function book(){
   const button=el('bookBtn');if(button.disabled)return;
   const duration=durationOf(state.services);
@@ -420,7 +448,7 @@ async function book(){
   button.disabled=true;
   if(CLOUD){
     try{
-      const {data,error}=await db.functions.invoke('create-booking',{body:{date:state.date,time:state.time,services:state.services.map(x=>x.id)}});
+      const {data,error}=await db.functions.invoke('ap-create-booking',{body:{date:state.date,time:state.time,services:state.services.map(x=>x.id)}});
       if(error)throw error;
       if(data?.error)throw Error(data.error);
       await loadCloudBookings();
@@ -477,7 +505,7 @@ async function savePlanEditor(index){
     toast('Preencha corretamente o nome, a descrição e os números do plano.');return;
   }
   if(CLOUD){
-    const {error}=await db.from('plans').update({name:changed.name,description:changed.description,price:changed.price,vacancies:changed.vacancies,subscribers:changed.subs}).eq('id',old.id);
+    const {error}=await db.from('ap_plans').update({name:changed.name,description:changed.description,price:changed.price,vacancies:changed.vacancies,subscribers:changed.subs}).eq('id',old.id);
     if(error){toast('Erro ao salvar plano: '+error.message);return}
     await loadCloudPlans();
   }else{all[index]={...old,...changed};savePlanData(all)}
@@ -499,7 +527,7 @@ function renderClubAdmin(){
 async function saveShopInfo(){
   const info={title:el('shopTitle').value.trim(),description:el('shopDescription').value.trim(),second_title:el('shopSecondTitle').value.trim(),second_description:el('shopSecondDescription').value.trim()};
   if(Object.values(info).some(x=>!x)){toast('Preencha os títulos e as descrições.');return}
-  if(CLOUD){const {error}=await db.from('shop_settings').update(info).eq('id',1);if(error){toast(error.message);return}cloudShopInfo=info}
+  if(CLOUD){const {error}=await db.from('ap_shop_settings').update(info).eq('id',1);if(error){toast(error.message);return}cloudShopInfo=info}
   else localStorage.setItem('ap_shop_info',JSON.stringify(info));
   renderClientBarbershop();toast('Apresentação da barbearia atualizada.');
 }
@@ -508,11 +536,11 @@ async function addShopPhoto(input){
   if(!file.type.startsWith('image/')||file.size>5*1024*1024){toast('Envie uma imagem de até 5 MB.');return}
   if(CLOUD){
     const name=`${crypto.randomUUID()}.${(file.type.split('/')[1]||'jpg').replace(/[^a-zA-Z0-9]/g,'')}`;
-    const {error}=await db.storage.from('shop-photos').upload(name,file,{contentType:file.type,upsert:false});
+    const {error}=await db.storage.from('ap-shop-photos').upload(name,file,{contentType:file.type,upsert:false});
     if(error){toast(error.message);return}
-    const url=db.storage.from('shop-photos').getPublicUrl(name).data.publicUrl;
-    const {error:insertError}=await db.from('shop_photos').insert({url,object_path:name});
-    if(insertError){await db.storage.from('shop-photos').remove([name]);toast(insertError.message);return}
+    const url=db.storage.from('ap-shop-photos').getPublicUrl(name).data.publicUrl;
+    const {error:insertError}=await db.from('ap_shop_photos').insert({url,object_path:name});
+    if(insertError){await db.storage.from('ap-shop-photos').remove([name]);toast(insertError.message);return}
     await loadCloudShop();
   }else{
     const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
@@ -521,18 +549,18 @@ async function addShopPhoto(input){
   input.value='';renderClubAdmin();renderClientBarbershop();toast('Foto adicionada.');
 }
 async function removeShopPhoto(i){
-  if(CLOUD){const item=cloudPhotoItems[i];if(!item)return;const {error}=await db.from('shop_photos').delete().eq('id',item.id);if(error){toast(error.message);return}await db.storage.from('shop-photos').remove([item.object_path]);await loadCloudShop()}
+  if(CLOUD){const item=cloudPhotoItems[i];if(!item)return;const {error}=await db.from('ap_shop_photos').delete().eq('id',item.id);if(error){toast(error.message);return}await db.storage.from('ap-shop-photos').remove([item.object_path]);await loadCloudShop()}
   else {const photos=shopPhotos();photos.splice(i,1);localStorage.setItem('mh_shop_photos',JSON.stringify(photos))}
   renderClubAdmin();renderClientBarbershop();
 }
 let cloudPhotoItems=[];
 async function addReview(){let body=el('newReview').value.trim();if(!body)return;
-  if(CLOUD){const {error}=await db.from('shop_reviews').insert({body});if(error){toast(error.message);return}await loadCloudShop()}
+  if(CLOUD){const {error}=await db.from('ap_shop_reviews').insert({body});if(error){toast(error.message);return}await loadCloudShop()}
   else{const a=reviews();a.unshift(body);localStorage.setItem('mh_reviews',JSON.stringify(a))}
   el('newReview').value='';renderClubAdmin();toast('Comentário adicionado.');
 }
 async function deleteReview(i){
-  if(CLOUD){const x=cloudReviews[i];if(!x)return;const {error}=await db.from('shop_reviews').delete().eq('id',x.id);if(error){toast(error.message);return}await loadCloudShop()}
+  if(CLOUD){const x=cloudReviews[i];if(!x)return;const {error}=await db.from('ap_shop_reviews').delete().eq('id',x.id);if(error){toast(error.message);return}await loadCloudShop()}
   else{const a=reviews();a.splice(i,1);localStorage.setItem('mh_reviews',JSON.stringify(a))}
   renderClubAdmin();
 }
@@ -594,7 +622,7 @@ function renderReception(){
   el('recDoneList').innerHTML=done.length?done.map(receptionCard).join(''):'<div class="card muted">Nenhum atendimento concluído.</div>';
 }
 async function completeAppt(id){
-  if(CLOUD){const {error}=await db.from('appointments').update({status:'Concluído',completed_at:new Date().toISOString()}).eq('id',id);
+  if(CLOUD){const {error}=await db.from('ap_appointments').update({status:'Concluído',completed_at:new Date().toISOString()}).eq('id',id);
     if(error){toast('Erro ao concluir: '+error.message);return}await loadCloudBookings()}
   else{const list=appts(),a=list.find(x=>String(x.id)===String(id));if(!a)return;a.status='Concluído';a.completedAt=new Date().toISOString();localStorage.setItem('mh_appts',JSON.stringify(list))}
   renderAdminAll();renderReception();renderAppointments();toast('Atendimento concluído e registrado no histórico.');
@@ -630,7 +658,7 @@ async function adrianoRegister(){
     usersMap[email]={name,email,phone,birth,source,pass:password,profile:{}};saveUsers(usersMap);
     localStorage.setItem('mh_current',email);closeAuth();enterApp();toast('Cadastro de demonstração concluído.');return;
   }
-  const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name,phone,birth,source},emailRedirectTo:location.origin+location.pathname}});
+  const {data,error}=await db.auth.signUp({email,password,options:{data:{app_id:'adriano_paulo',full_name:name,phone,birth,source},emailRedirectTo:location.origin+location.pathname}});
   if(error){toast(error.message);return}
   if(!data.session){closeAuth();toast('Confira seu e-mail e confirme o cadastro.');return}
   await loadCloudUser(data.user);closeAuth();enterApp();
@@ -653,7 +681,7 @@ async function adrianoLogin(){
       const {data,error}=await db.auth.signInWithPassword({email:input.toLowerCase(),password:pass});if(error)throw error;
       sessionUser=data.user;
     }else{
-      const {data,error}=await db.functions.invoke('staff-login',{body:{username:input,password:pass}});
+      const {data,error}=await db.functions.invoke('ap-staff-login',{body:{username:input,password:pass}});
       if(error||!data?.access_token||!data?.refresh_token)throw Error(data?.error||'Acesso interno não autorizado.');
       const set=await db.auth.setSession({access_token:data.access_token,refresh_token:data.refresh_token});
       if(set.error)throw set.error;
@@ -679,7 +707,12 @@ async function finishCloudLogin(){
 }
 async function loadCloudUser(user){
   if(!user)return;
-  const {data:profile,error}=await db.from('profiles').select('*').eq('user_id',user.id).maybeSingle();
+  let {data:profile,error}=await db.from('ap_profiles').select('*').eq('user_id',user.id).maybeSingle();
+  if(!error && !profile){
+    const initial={user_id:user.id,email:user.email,full_name:user.user_metadata?.full_name||'',phone:user.user_metadata?.phone||'',source:user.user_metadata?.source||'Site'};
+    const result=await db.from('ap_profiles').insert(initial).select('*').single();
+    if(!result.error)profile=result.data;
+  }
   if(error)throw error;
   cloudUser={name:profile?.full_name||user.user_metadata?.full_name||'Cliente',email:user.email,
     phone:profile?.phone||user.user_metadata?.phone||'',birth:profile?.birth||user.user_metadata?.birth||'',source:profile?.source||'',
@@ -691,7 +724,7 @@ function remoteAppointment(a){
     duration:a.duration,total:Number(a.total),status:a.status,created:a.created_at};
 }
 async function loadCloudBookings(){
-  const {data,error}=await db.from('appointments').select('*,profiles:customer_id(email,full_name,phone,avatar_url)').order('starts_at',{ascending:false});
+  const {data,error}=await db.from('ap_appointments').select('*,profiles:customer_id(email,full_name,phone,avatar_url)').order('starts_at',{ascending:false});
   if(error)throw error;
   cloudAppointments=(data||[]).map(x=>remoteAppointment(x));
   (data||[]).forEach(a=>{if(a.profiles?.email)cloudProfiles[a.profiles.email]={name:a.profiles.full_name,email:a.profiles.email,phone:a.profiles.phone,profile:{photo:a.profiles.avatar_url}}});
@@ -700,14 +733,14 @@ async function loadCloudBookings(){
   if(!el('receptionApp').classList.contains('hidden'))renderReception();
 }
 async function loadCloudPlans(){
-  const {data,error}=await db.from('plans').select('*').order('id');if(error)throw error;
+  const {data,error}=await db.from('ap_plans').select('*').order('id');if(error)throw error;
   cloudPlans=(data||[]).map(x=>({...x,subs:x.subscribers}));renderClientPlans();
 }
 async function loadCloudShop(){
   const [s,p,r]=await Promise.all([
-    db.from('shop_settings').select('*').eq('id',1).maybeSingle(),
-    db.from('shop_photos').select('*').order('created_at'),
-    db.from('shop_reviews').select('*').order('created_at',{ascending:false})]);
+    db.from('ap_shop_settings').select('*').eq('id',1).maybeSingle(),
+    db.from('ap_shop_photos').select('*').order('created_at'),
+    db.from('ap_shop_reviews').select('*').order('created_at',{ascending:false})]);
   for(const x of [s,p,r])if(x.error)throw x.error;
   cloudShopInfo=s.data||DEFAULT_SHOP;cloudPhotoItems=p.data||[];cloudShopPhotos=cloudPhotoItems.map(x=>x.url);cloudReviews=r.data||[];
   renderClientBarbershop();
@@ -727,7 +760,7 @@ async function saveProfile(){
       cpf:el('pCpf').value.trim(),cep:el('pCep').value.trim(),street:el('pStreet').value.trim(),house_number:el('pNumber').value.trim(),
       district:el('pDistrict').value.trim(),city:el('pCity').value.trim(),state:el('pState').value.trim(),complement:el('pComp').value.trim()};
     if(!fields.full_name){toast('Informe seu nome.');return}
-    const {error}=await db.from('profiles').update(fields).eq('user_id',user.id);
+    const {error}=await db.from('ap_profiles').update(fields).eq('user_id',user.id);
     if(error){toast(error.message);return}
     if(email!==user.email){const {error:mailErr}=await db.auth.updateUser({email});if(mailErr){toast('Perfil salvo. E-mail não alterado: '+mailErr.message);return}toast('Perfil salvo. Confirme a mudança de e-mail na sua caixa de entrada.')}
     else toast('Perfil salvo.');
@@ -744,9 +777,9 @@ async function setPhoto(input){
   if(CLOUD){
     const {data:{user}}=await db.auth.getUser();if(!user)return;
     const path=`${user.id}/avatar-${crypto.randomUUID()}.${(f.type.split('/')[1]||'png').replace(/[^a-z0-9]/gi,'')}`;
-    const {error}=await db.storage.from('avatars').upload(path,f,{contentType:f.type});if(error){toast(error.message);return}
-    const url=db.storage.from('avatars').getPublicUrl(path).data.publicUrl;
-    const {error:e2}=await db.from('profiles').update({avatar_url:url}).eq('user_id',user.id);
+    const {error}=await db.storage.from('ap-avatars').upload(path,f,{contentType:f.type});if(error){toast(error.message);return}
+    const url=db.storage.from('ap-avatars').getPublicUrl(path).data.publicUrl;
+    const {error:e2}=await db.from('ap_profiles').update({avatar_url:url}).eq('user_id',user.id);
     if(e2){toast(e2.message);return}
     cloudUser.profile.photo=url;setPhotoUI(url);return;
   }
@@ -810,7 +843,7 @@ function showCalendarStatus(){
 }
 async function syncCalendarNow(){
  if(!CLOUD){toast('Google Agenda exige configuração do backend.');return}
- try{const {data,error}=await db.functions.invoke('sync-calendar',{body:{}});if(error)throw error;
+ try{const {data,error}=await db.functions.invoke('ap-sync-calendar',{body:{}});if(error)throw error;
  toast(`Google Agenda: ${data.synced||0} sincronizados, ${data.failed||0} pendentes.`)}
  catch(e){toast('Falha na integração Google Agenda: '+(e.message||'Verifique as credenciais'))}
 }
@@ -839,7 +872,7 @@ async function bootAdrianoApp(){
       await loadCloudUser(session.user);
       const {data:aal}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
       if(aal?.currentLevel==='aal1'&&aal?.nextLevel==='aal2'){mfaRequired=true;await challengeMFA();return}
-      const {data:staff}=await db.from('staff_accounts').select('role').eq('user_id',session.user.id).maybeSingle();
+      const {data:staff}=await db.from('ap_staff_accounts').select('role').eq('user_id',session.user.id).maybeSingle();
       pendingRole=staff?.role||'client';
       if(pendingRole!=='client'&&aal?.currentLevel!=='aal2'){mfaRequired=true;await activateMFA();return}
       await finishCloudLogin();

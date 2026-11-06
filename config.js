@@ -1,6 +1,6 @@
-// Configure apenas os valores públicos do projeto Supabase. NUNCA coloque a service_role aqui.
+// Chaves publicas do projeto Supabase autorizado. NAO adicione secrets aqui.
 window.APP_CONFIG={
-  supabaseUrl:'',
-  supabasePublishableKey:'',
+  supabaseUrl:'https://fqisewatypluagngmgka.supabase.co',
+  supabasePublishableKey:'sb_publishable_Etts25r3XRBdDHuUYuUajg_YjXTn_wb',
   previewMode:false
 };
