@@ -1,10 +1,10 @@
--- Adriano Paulo Barbearia | Estrutura para projeto Supabase DEDICADO.
--- Execute apenas em um projeto próprio da barbearia; não execute em outros projetos.
+-- Adriano Paulo Barbearia | Estrutura isolada por prefixo ap_ no Supabase compartilhado.
+-- Não altera dados existentes da L&A Royal Advisory.
 -- Autenticação: auth.users / MFA por TOTP; agendamento: Edge Function create-booking.
 
 create schema if not exists private;
 
-create table if not exists public.profiles (
+create table if not exists public.ap_profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   email text not null,
   full_name text not null default '',
@@ -24,7 +24,7 @@ create table if not exists public.profiles (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.staff_accounts (
+create table if not exists public.ap_staff_accounts (
   user_id uuid primary key references auth.users(id) on delete cascade,
   username text not null unique,
   email text not null unique,
@@ -32,14 +32,14 @@ create table if not exists public.staff_accounts (
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.services (
+create table if not exists public.ap_services (
   id smallint primary key,
   name text not null,
   price numeric(10,2) not null check(price >= 0),
   duration integer not null check(duration between 5 and 480),
   active boolean not null default true
 );
-insert into public.services (id,name,price,duration) values
+insert into public.ap_services (id,name,price,duration) values
   (1,'Corte de Cabelo',25,40),
   (2,'Barba',20,20),
   (3,'Cabelo + Barba',45,45),
@@ -48,7 +48,7 @@ insert into public.services (id,name,price,duration) values
   (6,'Nevou',50,120)
 on conflict (id) do update set name=excluded.name,price=excluded.price,duration=excluded.duration;
 
-create table if not exists public.plans (
+create table if not exists public.ap_plans (
   id smallint primary key,
   name text not null,
   description text not null,
@@ -58,13 +58,13 @@ create table if not exists public.plans (
   best boolean not null default false,
   updated_at timestamptz not null default now()
 );
-insert into public.plans (id,name,description,price,vacancies,subscribers,best) values
+insert into public.ap_plans (id,name,description,price,vacancies,subscribers,best) values
   (1,'Corte ILIMITADO','Cortes de cabelo conforme as condições do plano.',74.90,5,0,true),
   (2,'Corte e Barba ILIMITADO','Corte de cabelo e barba conforme as condições do plano.',129.90,2,0,false),
   (3,'Barba ILIMITADA','Cuidados de barba conforme as condições do plano.',89.90,4,0,false)
 on conflict (id) do nothing;
 
-create table if not exists public.shop_settings (
+create table if not exists public.ap_shop_settings (
   id smallint primary key default 1 check(id = 1),
   title text not null,
   description text not null,
@@ -72,27 +72,27 @@ create table if not exists public.shop_settings (
   second_description text not null,
   updated_at timestamptz not null default now()
 );
-insert into public.shop_settings(id,title,description,second_title,second_description) values
+insert into public.ap_shop_settings(id,title,description,second_title,second_description) values
   (1,'Sobre a Adriano Paulo Barbearia','Um espaço dedicado ao cuidado pessoal, com atenção aos detalhes e atendimento individualizado.',
    'Nossa proposta','Valorizar o seu estilo em cada atendimento, com um ambiente acolhedor e serviços realizados com precisão.')
 on conflict (id) do nothing;
 
-create table if not exists public.shop_photos (
+create table if not exists public.ap_shop_photos (
   id bigint generated always as identity primary key,
   url text not null,
   object_path text not null unique,
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.shop_reviews (
+create table if not exists public.ap_shop_reviews (
   id bigint generated always as identity primary key,
   body text not null check(char_length(body) between 1 and 1000),
   created_at timestamptz not null default now()
 );
 
-create table if not exists public.appointments (
+create table if not exists public.ap_appointments (
   id uuid primary key default gen_random_uuid(),
-  customer_id uuid not null references public.profiles(user_id),
+  customer_id uuid not null references public.ap_profiles(user_id),
   booking_date date not null,
   booking_time time not null,
   starts_at timestamptz not null,
@@ -110,15 +110,19 @@ create table if not exists public.appointments (
     tstzrange(starts_at,ends_at,'[)') WITH &&
   ) WHERE (status <> 'Cancelado')
 );
-create index if not exists appointments_customer_idx on public.appointments(customer_id,booking_date desc);
-create index if not exists appointments_day_idx on public.appointments(booking_date,booking_time);
+create index if not exists appointments_customer_idx on public.ap_appointments(customer_id,booking_date desc);
+create index if not exists appointments_day_idx on public.ap_appointments(booking_date,booking_time);
 
 -- Criar perfil automaticamente após cadastro no Supabase Auth.
 -- Esta função é de gatilho, em schema não exposto, e nunca atribui privilégios.
-create or replace function private.create_profile_on_signup()
+create or replace function private.create_ap_profile_on_signup()
 returns trigger language plpgsql security definer set search_path = '' as $$
 begin
-  insert into public.profiles(user_id,email,full_name,phone,birth,source)
+  -- Somente novos usuários que se registrarem pela Adriano Paulo Barbearia.
+  if coalesce(new.raw_user_meta_data->>'app_id','') <> 'adriano_paulo' then
+    return new;
+  end if;
+  insert into public.ap_profiles(user_id,email,full_name,phone,birth,source)
   values(new.id,coalesce(new.email,''),
     coalesce(new.raw_user_meta_data->>'full_name',''),
     coalesce(new.raw_user_meta_data->>'phone',''),
@@ -127,90 +131,90 @@ begin
   on conflict (user_id) do nothing;
   return new;
 end $$;
-revoke all on function private.create_profile_on_signup() from public, anon, authenticated;
-drop trigger if exists on_auth_user_created_adriano on auth.users;
-create trigger on_auth_user_created_adriano after insert on auth.users
-for each row execute function private.create_profile_on_signup();
+revoke all on function private.create_ap_profile_on_signup() from public, anon, authenticated;
+drop trigger if exists on_auth_user_created_ap on auth.users;
+create trigger on_auth_user_created_ap after insert on auth.users
+for each row execute function private.create_ap_profile_on_signup();
 
-alter table public.profiles enable row level security;
-alter table public.staff_accounts enable row level security;
-alter table public.services enable row level security;
-alter table public.plans enable row level security;
-alter table public.shop_settings enable row level security;
-alter table public.shop_photos enable row level security;
-alter table public.shop_reviews enable row level security;
-alter table public.appointments enable row level security;
+alter table public.ap_profiles enable row level security;
+alter table public.ap_staff_accounts enable row level security;
+alter table public.ap_services enable row level security;
+alter table public.ap_plans enable row level security;
+alter table public.ap_shop_settings enable row level security;
+alter table public.ap_shop_photos enable row level security;
+alter table public.ap_shop_reviews enable row level security;
+alter table public.ap_appointments enable row level security;
 
 -- Um funcionário só pode ser elevado por um administrador de banco/service_role.
-create policy staff_own_read on public.staff_accounts for select to authenticated
+create policy staff_own_read on public.ap_staff_accounts for select to authenticated
 using(user_id=(select auth.uid()));
 
 -- Perfis: cliente vê/edita apenas seu; equipe com MFA vê dados necessários aos agendamentos.
-create policy profiles_read_self_or_staff on public.profiles for select to authenticated
+create policy profiles_read_self_or_staff on public.ap_profiles for select to authenticated
 using (
   user_id=(select auth.uid()) or
   ((auth.jwt()->>'aal')='aal2' and exists(
-    select 1 from public.staff_accounts s where s.user_id=(select auth.uid())
+    select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid())
     and s.role in ('admin','reception')
   ))
 );
-create policy profiles_update_self on public.profiles for update to authenticated
+create policy profiles_update_self on public.ap_profiles for update to authenticated
 using(user_id=(select auth.uid())) with check(user_id=(select auth.uid()));
 
-create policy services_public_read on public.services for select to anon, authenticated using(active=true);
-create policy plans_public_read on public.plans for select to anon, authenticated using(true);
-create policy plans_admin_edit on public.plans for update to authenticated
-using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'))
-with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy shop_settings_public_read on public.shop_settings for select to anon, authenticated using(true);
-create policy shop_settings_admin_edit on public.shop_settings for update to authenticated
-using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'))
-with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy shop_photos_public_read on public.shop_photos for select to anon, authenticated using(true);
-create policy shop_photos_admin_insert on public.shop_photos for insert to authenticated
-with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy shop_photos_admin_delete on public.shop_photos for delete to authenticated
-using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy shop_reviews_public_read on public.shop_reviews for select to anon, authenticated using(true);
-create policy shop_reviews_admin_insert on public.shop_reviews for insert to authenticated
-with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy shop_reviews_admin_delete on public.shop_reviews for delete to authenticated
-using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
-create policy appointments_read_self_or_staff on public.appointments for select to authenticated
+create policy services_public_read on public.ap_services for select to anon, authenticated using(active=true);
+create policy plans_public_read on public.ap_plans for select to anon, authenticated using(true);
+create policy plans_admin_edit on public.ap_plans for update to authenticated
+using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'))
+with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy shop_settings_public_read on public.ap_shop_settings for select to anon, authenticated using(true);
+create policy shop_settings_admin_edit on public.ap_shop_settings for update to authenticated
+using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'))
+with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy shop_photos_public_read on public.ap_shop_photos for select to anon, authenticated using(true);
+create policy shop_photos_admin_insert on public.ap_shop_photos for insert to authenticated
+with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy shop_photos_admin_delete on public.ap_shop_photos for delete to authenticated
+using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy shop_reviews_public_read on public.ap_shop_reviews for select to anon, authenticated using(true);
+create policy shop_reviews_admin_insert on public.ap_shop_reviews for insert to authenticated
+with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy shop_reviews_admin_delete on public.ap_shop_reviews for delete to authenticated
+using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+create policy appointments_read_self_or_staff on public.ap_appointments for select to authenticated
 using(customer_id=(select auth.uid()) or
   ((auth.jwt()->>'aal')='aal2' and exists(
-   select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')
+   select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')
   )));
-create policy appointments_staff_complete on public.appointments for update to authenticated
-using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')))
-with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')));
+create policy appointments_staff_complete on public.ap_appointments for update to authenticated
+using((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')))
+with check((auth.jwt()->>'aal')='aal2' and exists(select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role in ('admin','reception')));
 
 -- Data API: acesso mínimo + RLS. Booking somente por Edge Function com service_role.
-revoke all on public.staff_accounts from anon, authenticated;
-grant select on public.staff_accounts to authenticated;
-grant select on public.profiles to authenticated;
-grant update(full_name,phone,birth,cpf,cep,street,house_number,district,city,state,complement,avatar_url) on public.profiles to authenticated;
-grant select on public.services,public.plans,public.shop_settings,public.shop_photos,public.shop_reviews to anon,authenticated;
-grant update(name,description,price,vacancies,subscribers) on public.plans to authenticated;
-grant update(title,description,second_title,second_description) on public.shop_settings to authenticated;
-grant insert,delete on public.shop_photos,public.shop_reviews to authenticated;
-grant select on public.appointments to authenticated;
-grant update(status,completed_at) on public.appointments to authenticated;
+revoke all on public.ap_staff_accounts from anon, authenticated;
+grant select on public.ap_staff_accounts to authenticated;
+grant select on public.ap_profiles to authenticated;
+grant update(full_name,phone,birth,cpf,cep,street,house_number,district,city,state,complement,avatar_url) on public.ap_profiles to authenticated;
+grant select on public.ap_services,public.ap_plans,public.ap_shop_settings,public.ap_shop_photos,public.ap_shop_reviews to anon,authenticated;
+grant update(name,description,price,vacancies,subscribers) on public.ap_plans to authenticated;
+grant update(title,description,second_title,second_description) on public.ap_shop_settings to authenticated;
+grant insert,delete on public.ap_shop_photos,public.ap_shop_reviews to authenticated;
+grant select on public.ap_appointments to authenticated;
+grant update(status,completed_at) on public.ap_appointments to authenticated;
 
 -- Buckets: imagens públicas, mas escrita restrita a conta proprietária ou ADM com MFA.
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values
- ('shop-photos','shop-photos',true,5242880,array['image/jpeg','image/png','image/webp']),
- ('avatars','avatars',true,5242880,array['image/jpeg','image/png','image/webp'])
+ ('ap-shop-photos','ap-shop-photos',true,5242880,array['image/jpeg','image/png','image/webp']),
+ ('ap-avatars','ap-avatars',true,5242880,array['image/jpeg','image/png','image/webp'])
 on conflict(id) do nothing;
 create policy adriano_staff_shop_upload on storage.objects for insert to authenticated
-with check(bucket_id='shop-photos' and (auth.jwt()->>'aal')='aal2' and exists(
-  select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+with check(bucket_id='ap-shop-photos' and (auth.jwt()->>'aal')='aal2' and exists(
+  select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
 create policy adriano_staff_shop_delete on storage.objects for delete to authenticated
-using(bucket_id='shop-photos' and (auth.jwt()->>'aal')='aal2' and exists(
-  select 1 from public.staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
+using(bucket_id='ap-shop-photos' and (auth.jwt()->>'aal')='aal2' and exists(
+  select 1 from public.ap_staff_accounts s where s.user_id=(select auth.uid()) and s.role='admin'));
 create policy adriano_avatar_insert on storage.objects for insert to authenticated
-with check(bucket_id='avatars' and (storage.foldername(name))[1]=(select auth.uid())::text);
+with check(bucket_id='ap-avatars' and (storage.foldername(name))[1]=(select auth.uid())::text);
 
 -- Leitura de arquivos de imagem dos buckets públicos (os arquivos são públicos por definição).
 create policy adriano_storage_image_read on storage.objects for select to anon, authenticated
-using(bucket_id in ('shop-photos','avatars'));
+using(bucket_id in ('ap-shop-photos','ap-avatars'));

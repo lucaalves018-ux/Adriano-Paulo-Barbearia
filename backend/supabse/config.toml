@@ -1,0 +1,6 @@
+[functions.ap-staff-login]
+verify_jwt = false
+[functions.ap-create-booking]
+verify_jwt = true
+[functions.ap-sync-calendar]
+verify_jwt = true
