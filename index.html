@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#000000" name="theme-color"/><title>Adriano Paulo | Barbearia</title>
+<style>
+:root {
+  color-scheme: dark;
+  --black:#030507; --black-soft:#070A0E;
+  --panel:#0A1018; --panel2:#0D1724; --panel3:#111E2D;
+  --navy:#07182A; --navy-2:#0A223A; --navy-3:#103454;
+  --gold:#D4AF37; --gold-strong:#E2BD4B; --gold-light:#F4DC8A;
+  --white:#F8F5EC; --muted:#AAA99F;
+  --border:rgba(212,175,55,.22);
+  --danger:#FF6B6B; --success:#46C98B;
+}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% 0,#123b5b 0,transparent 30%),var(--bg);color:var(--white);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.logo{width:116px;height:116px;object-fit:contain;border-radius:18px}.brand{letter-spacing:.22em;font-weight:800}.silver{color:var(--silver)}.muted{color:var(--muted)}
+#landing{min-height:100vh;display:grid;place-items:center;padding:30px;overflow:hidden;position:relative}.landing-card{width:min(980px,100%);text-align:center;padding:48px 24px}.landing-card h1{font-size:clamp(34px,7vw,72px);margin:20px 0 8px;letter-spacing:.12em}.smoke{min-height:112px;display:grid;place-items:center;margin:28px auto;max-width:720px}.smoke>div{animation:smoke 8s ease both;font-size:clamp(18px,3vw,27px);color:#d9dcdf;text-shadow:0 0 22px #fff3}@keyframes smoke{0%{opacity:0;filter:blur(14px);transform:translateY(16px) scale(.98)}18%,75%{opacity:1;filter:blur(0);transform:none}100%{opacity:0;filter:blur(14px);transform:translateY(-14px) scale(1.02)}}.primary,.ghost{border:1px solid var(--silver);border-radius:999px;padding:13px 20px}.primary{background:linear-gradient(135deg,#ffe45c,#ffc400);color:#07121c;font-weight:800}.ghost{background:#05090d;color:#fff}.landing-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:#000c;backdrop-filter:blur(12px);display:grid;place-items:center;padding:20px;z-index:50}.auth{width:min(520px,100%);background:linear-gradient(180deg,#0b2942,#05090d);border:1px solid #35383d;border-radius:28px;padding:28px;box-shadow:var(--shadow)}.auth h2{margin:10px 0 4px}.grid{display:grid;gap:14px}.field label{display:block;color:#c9cdd1;margin-bottom:6px;font-size:13px}.field input,.field select{width:100%;background:#08090a;color:#fff;border:1px solid #30343a;border-radius:14px;padding:13px;outline:none}.field input:focus,.field select:focus{border-color:#cdd1d5;box-shadow:0 0 0 3px #fff1}.auth .primary{width:100%;margin-top:8px}.auth-foot{text-align:center;margin-top:14px}.link{color:#fff;text-decoration:underline;cursor:pointer}
+#app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:260px;background:#04111d;border-right:1px solid var(--line);padding:22px 16px;z-index:20;display:flex;flex-direction:column}.side-brand{display:flex;align-items:center;gap:12px;padding:0 8px 22px}.side-brand img{width:56px;height:56px;object-fit:contain;border-radius:12px}.nav{display:grid;gap:7px}.nav button{display:flex;gap:11px;align-items:center;border:0;border-radius:13px;padding:13px 14px;color:#b9bdc2;background:transparent;text-align:left}.nav button:hover,.nav button.active{background:linear-gradient(90deg,#173b57,#0b2942);color:#ffd21c}.logout{margin-top:auto}.main{margin-left:260px;padding:28px;max-width:1500px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.avatar{width:42px;height:42px;border-radius:50%;background:#222;border:1px solid #555;display:grid;place-items:center;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.hero{padding:30px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,#0d304d,#05090d 62%);box-shadow:var(--shadow)}.hero h1{font-size:clamp(28px,5vw,54px);margin:0 0 10px}.quick{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:linear-gradient(180deg,#0b2942,#06131f);border:1px solid var(--line);border-radius:var(--r);padding:20px}.card h3{margin:0 0 8px}.section{display:none}.section.active{display:block}.section-title{font-size:30px;margin:0 0 6px}.booking{margin-top:18px}.step{margin-bottom:18px}.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.choice{border:1px solid #30343a;background:#0b0c0e;color:#ddd;border-radius:16px;padding:13px;text-align:left}.choice.selected{border-color:#ffd21c;background:#12324b;color:#fff;box-shadow:inset 0 0 0 1px #fff4}.service-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.service{display:flex;justify-content:space-between;gap:14px}.summary{position:sticky;bottom:16px;background:#111e;border:1px solid #45494e;backdrop-filter:blur(12px);border-radius:18px;padding:15px;display:flex;justify-content:space-between;gap:14px;align-items:center}.summary .primary:disabled{opacity:.35;cursor:not-allowed}.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:9px}.slot{border:1px solid #333;background:#0a0b0c;color:#fff;border-radius:12px;padding:10px}.slot.selected{background:#ffd21c;color:#07121c}.slot:disabled{opacity:.25;text-decoration:line-through}.appt{display:flex;justify-content:space-between;gap:12px;align-items:center}.pill{padding:5px 10px;border:1px solid #3b3e43;border-radius:999px;color:#cdd1d5;font-size:12px}.plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.price{font-size:34px;font-weight:900}.benefits{padding-left:18px;color:#d3d6da}.benefits li{margin:9px 0}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.profile-photo{display:flex;align-items:center;gap:18px}.profile-photo .avatar{width:86px;height:86px}.switch{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 0;border-top:1px solid #24272b}.toggle{width:48px;height:28px;border-radius:99px;background:#333;border:0;position:relative}.toggle:after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#aaa;left:4px;top:4px;transition:.2s}.toggle.on{background:#e2e5e7}.toggle.on:after{left:24px;background:#050505}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.gallery div{aspect-ratio:4/3;border-radius:18px;background:linear-gradient(135deg,#2c3035,#0b0c0d);display:grid;place-items:center;color:#aeb3b8}.toast{position:fixed;right:22px;bottom:22px;background:#f1f1f1;color:#111;padding:13px 17px;border-radius:13px;box-shadow:var(--shadow);z-index:90}
+@media(max-width:900px){.sidebar{width:76px;padding:16px 9px}.side-brand .brand,.nav span{display:none}.side-brand{padding:0 0 18px;justify-content:center}.side-brand img{width:50px;height:50px}.nav button{justify-content:center;font-size:20px}.main{margin-left:76px;padding:18px}.cards,.plan-grid{grid-template-columns:1fr}.profile-grid{grid-template-columns:1fr}.service-list{grid-template-columns:1fr}}
+@media(max-width:560px){.sidebar{inset:auto 0 0 0;width:auto;height:70px;border-right:0;border-top:1px solid var(--line);padding:7px;background:#04111df2;backdrop-filter:blur(10px)}.side-brand,.logout{display:none}.nav{grid-template-columns:repeat(5,1fr);gap:2px}.nav button{padding:9px 4px}.main{margin-left:0;padding:16px 14px 92px}.topbar{margin-bottom:14px}.hero{padding:22px}.summary{bottom:82px;align-items:flex-start;flex-direction:column}.summary .primary{width:100%}.gallery{grid-template-columns:1fr 1fr}}
+
+.admin-shell{min-height:100vh}.admin-sidebar{position:fixed;inset:0 auto 0 0;width:270px;background:#070809;border-right:1px solid var(--line);padding:22px 16px;z-index:30;display:flex;flex-direction:column}.admin-main{margin-left:270px;padding:28px}.metric{font-size:30px;font-weight:900;margin-top:8px}.admin-table{width:100%;border-collapse:collapse}.admin-table th,.admin-table td{padding:12px;border-bottom:1px solid #282b2f;text-align:left;vertical-align:middle}.admin-table th{color:#aeb3b8;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.mini-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid #555;background:#202226}.staff-row{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:center}.staff-row .mini-avatar{width:64px;height:64px}.admin-actions{display:flex;gap:8px;flex-wrap:wrap}.admin-actions button{padding:8px 12px}.chartbar{height:9px;background:#25282c;border-radius:99px;overflow:hidden;margin-top:7px}.chartbar i{display:block;height:100%;background:linear-gradient(90deg,#d39e00,#ffd21c);border-radius:99px}.upload-tile{min-height:160px;border:1px dashed #555;border-radius:18px;display:grid;place-items:center;overflow:hidden}.upload-tile img{width:100%;height:180px;object-fit:cover}.admin-note{padding:12px 14px;border:1px solid #42464b;border-radius:14px;background:#111315}.status-pending{color:#ffd37a}.status-done{color:#a9ffbd}@media(max-width:900px){.admin-sidebar{width:76px;padding:16px 9px}.admin-sidebar .brand,.admin-sidebar .nav span{display:none}.admin-sidebar .nav button{justify-content:center}.admin-main{margin-left:76px;padding:18px}}@media(max-width:560px){.admin-sidebar{inset:auto 0 0 0;width:auto;height:70px;border-right:0;border-top:1px solid var(--line);padding:7px}.admin-sidebar .side-brand,.admin-sidebar .logout{display:none}.admin-sidebar .nav{grid-template-columns:repeat(5,1fr)}.admin-main{margin-left:0;padding:16px 14px 92px}.admin-table{font-size:12px}.admin-table th,.admin-table td{padding:8px 5px}}
+
+/* FIX: rolagem do cadastro/login */
+#authModal{
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-items:start;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+#authModal .auth{
+  margin:auto;
+  max-height:calc(100dvh - 40px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+@media(max-width:560px){
+  #authModal{
+    display:block;
+    padding:12px;
+  }
+  #authModal .auth{
+    width:100%;
+    max-height:calc(100dvh - 24px);
+    margin:0 auto;
+    padding:20px 16px 28px;
+    border-radius:20px;
+  }
+}
+
+
+.reception-shell{min-height:100vh;background:radial-gradient(circle at 80% 0,#123b5b 0,transparent 30%),var(--bg)}
+.reception-sidebar{position:fixed;inset:0 auto 0 0;width:270px;background:#04111d;border-right:1px solid var(--line);padding:22px 16px;z-index:30;display:flex;flex-direction:column}
+.reception-main{margin-left:270px;padding:28px}.reception-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
+.reception-appt{position:relative;overflow:hidden}.reception-appt .appt-time{font-size:28px;font-weight:900;color:#ffd21c}.reception-appt.done{opacity:.72}
+.reception-appt.done:after{content:"✓";position:absolute;right:18px;top:14px;font-size:38px;color:#66e08a;font-weight:900}
+.reception-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.complete-btn{position:relative;overflow:visible}
+.complete-btn.burst{animation:jmClickImpact .42s cubic-bezier(.2,.8,.2,1)}
+.complete-btn.burst:before,.complete-btn.burst:after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;border:3px solid #ffd21c;border-radius:50%;pointer-events:none;animation:jmBurst .48s ease-out forwards}
+.complete-btn.burst:after{animation-delay:.04s;border-color:#fff}
+@keyframes jmClickImpact{0%{transform:scale(1)}35%{transform:scale(.84)}65%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes jmBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(8);box-shadow:0 0 20px 8px #ffd21c44}}
+@media(max-width:900px){.reception-sidebar{width:76px;padding:16px 9px}.reception-sidebar .brand,.reception-sidebar .nav span{display:none}.reception-main{margin-left:76px;padding:18px}}
+@media(max-width:560px){.reception-sidebar{inset:auto 0 0 0;width:auto;height:70px;border-right:0;border-top:1px solid var(--line);padding:7px}.reception-sidebar .side-brand,.reception-sidebar .logout{display:none}.reception-sidebar .nav{grid-template-columns:repeat(3,1fr)}.reception-main{margin-left:0;padding:16px 14px 92px}}
+
+
+.profile-logout-mobile{display:none}
+@media(max-width:560px){
+#profile .profile-grid{display:block}
+#profile .profile-grid>.card,#profile .profile-grid>div>.card{margin-bottom:12px;padding:16px;border-radius:18px}
+#profile .profile-photo{flex-direction:column;align-items:center;text-align:center;gap:10px}
+#profile .profile-photo .avatar{width:92px;height:92px}
+#profile .grid{gap:10px!important;margin-top:10px!important}
+#profile .field input,#profile .field select{padding:12px;border-radius:12px;font-size:14px}
+#profile .switch{align-items:flex-start;padding:13px 0;gap:10px}
+#profile .switch>div{min-width:0;flex:1}
+#profile .switch .ghost{padding:8px 10px;font-size:12px;max-width:128px;white-space:normal}
+#profile .primary{width:100%}
+.profile-logout-mobile{display:block;width:100%;margin-top:14px;border-color:#ff6b6b!important;color:#ff8a8a!important;background:#180b0d!important}
+}
+
+
+/* PALETA GLOBAL ADRIANO PAULO — preto, dourado e azul-escuro */
+html,body{background:radial-gradient(circle at 12% 0%,rgba(10,34,58,.42),transparent 31%),radial-gradient(circle at 90% 16%,rgba(212,175,55,.09),transparent 27%),#030507!important;color:#F8F5EC!important}
+body,main,.page,.app,.site-shell,.dashboard,.dashboard-content,.admin-app,.reception-app,.client-app{background-color:#030507!important}
+header,.header,.topbar,.navbar,.nav,.app-header{background:linear-gradient(180deg,rgba(7,24,42,.98),rgba(3,5,7,.97))!important;border-color:rgba(212,175,55,.24)!important;box-shadow:0 12px 38px rgba(0,0,0,.34)!important}
+.hero{background:radial-gradient(circle at 50% 8%,rgba(212,175,55,.14),transparent 34%),radial-gradient(circle at 12% 82%,rgba(10,34,58,.52),transparent 38%),linear-gradient(180deg,#030507 0%,#07101A 58%,#030507 100%)!important}
+.card,.service-card,.stat-card,.metric-card,.booking-card,.profile-card,.plan-card,.appointment-card,.ranking-card,.chart-card,.panel,.box,.modal-content,.login-card,.admin-card,.reception-card,.client-card,.table-wrap{background:linear-gradient(145deg,rgba(13,23,36,.98),rgba(6,10,15,.99))!important;border-color:rgba(31,77,121,.48)!important;box-shadow:0 18px 45px rgba(0,0,0,.3),inset 0 1px 0 rgba(212,175,55,.05)!important}
+.card:hover,.service-card:hover,.plan-card:hover,.appointment-card:hover{border-color:rgba(212,175,55,.54)!important}
+.sidebar,aside,.admin-sidebar,.reception-sidebar{background:linear-gradient(180deg,#07182A 0%,#06111D 56%,#030507 100%)!important;border-color:rgba(212,175,55,.22)!important}
+.sidebar a,.sidebar button,.side-link,.nav-item{color:#C9CED5!important}
+.sidebar a:hover,.sidebar button:hover,.side-link:hover,.nav-item:hover{background:rgba(16,52,84,.5)!important;color:#F4DC8A!important}
+.sidebar .active,.side-link.active,.nav-item.active,.bottom-nav .active,.tab.active,.filter-btn.active{background:linear-gradient(135deg,rgba(212,175,55,.21),rgba(10,34,58,.66))!important;color:#F4DC8A!important;border-color:rgba(212,175,55,.46)!important}
+h1,h2,h3,.section-title,.brand-name,.brand-title{color:#F8F5EC!important}
+h1 span,h2 span,.gold,.highlight,.eyebrow,.stat-value,.metric-value,.price,.ranking-number{color:#D4AF37!important}
+p,.muted,.subtitle,.description,small{color:#AAA99F!important}
+.btn-gold,.primary-btn,button.primary,.cta,button[type=submit],.complete-btn{background:linear-gradient(135deg,#E2BD4B,#B88A20)!important;color:#050607!important;border-color:#E2BD4B!important;box-shadow:0 10px 28px rgba(212,175,55,.17)!important}
+.btn-gold:hover,.primary-btn:hover,button.primary:hover,.cta:hover,button[type=submit]:hover,.complete-btn:hover{background:linear-gradient(135deg,#F4DC8A,#D4AF37)!important;color:#030507!important}
+.btn-outline,.secondary-btn,button.secondary{background:rgba(7,24,42,.66)!important;color:#F4DC8A!important;border-color:rgba(212,175,55,.47)!important}
+input,select,textarea,.input,.select{background:#07101A!important;color:#F8F5EC!important;border-color:rgba(31,77,121,.68)!important}
+input:focus,select:focus,textarea:focus{border-color:#D4AF37!important;box-shadow:0 0 0 3px rgba(212,175,55,.12)!important;outline:none!important}
+input::placeholder,textarea::placeholder{color:#777F89!important}
+table,thead,tbody,tr,td,th{border-color:rgba(31,77,121,.32)!important}
+thead,th{background:#07182A!important;color:#F4DC8A!important}
+tbody tr:nth-child(even){background:rgba(10,34,58,.19)!important}
+tbody tr:hover{background:rgba(16,52,84,.3)!important}
+.badge,.status,.chip,.tag{background:rgba(10,34,58,.66)!important;color:#D9E7F5!important;border-color:rgba(31,77,121,.6)!important}
+.status.completed,.badge.completed,.status.done,.badge.done{background:rgba(70,201,139,.12)!important;color:#72E1AA!important;border-color:rgba(70,201,139,.35)!important}
+.status.pending,.badge.pending{background:rgba(212,175,55,.13)!important;color:#F4DC8A!important;border-color:rgba(212,175,55,.4)!important}
+.modal,.modal-overlay,.overlay{background:rgba(1,3,5,.84)!important;backdrop-filter:blur(10px)}
+.tabs,.filters,.segmented{background:#06111D!important;border-color:rgba(31,77,121,.44)!important}
+.bottom-nav{background:rgba(7,24,42,.98)!important;border-color:rgba(212,175,55,.22)!important;box-shadow:0 -12px 34px rgba(0,0,0,.34)!important}
+hr,.divider{border-color:rgba(31,77,121,.36)!important}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#030507}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#103454,#B88A20);border-radius:999px;border:2px solid #030507}
+::selection{background:rgba(212,175,55,.34);color:#fff}
+
+</style>
+<link href="manifest.json" rel="manifest"/>
+<link href="icon-maskable-512.png" rel="icon" type="image/png"/>
+<link href="icon-maskable-512.png" rel="apple-touch-icon"/>
+<script src="config.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<style>
+/* Paleta oficial: preto sólido + dourado sem clareamento/escurecimento de botões. */
+button.primary,button.primary:hover,button[type=submit],button[type=submit]:hover,
+.complete-btn,.complete-btn:hover,.btn-gold,.btn-gold:hover,.primary-btn,.primary-btn:hover,.cta,.cta:hover {
+  background:#D4AF37!important;background-image:none!important;color:#000000!important;
+  border-color:#D4AF37!important;box-shadow:none!important;
+}
+.gallery>div{background:#0a0a0a!important;color:#b5b5b5!important;border:1px solid rgba(212,175,55,.2)!important}
+
+header,.header,.topbar,.navbar,.nav,.app-header,.bottom-nav,.reception-shell{
+  background:#000000!important;box-shadow:none!important;border-color:rgba(212,175,55,.3)!important;
+}
+.sidebar .active,.side-link.active,.nav-item.active,.bottom-nav .active,.tab.active,.filter-btn.active{
+  background:#16120a!important;color:#D4AF37!important;border-color:#D4AF37!important;
+}
+.status-pending,.status-done,.reception-appt .appt-time,.reception-appt.done:after{
+  color:#D4AF37!important;
+}
+.toggle.on{background:#D4AF37!important}.toggle.on:after{background:#000!important}
+.toast{background:#0b0b0b!important;color:#D4AF37!important;border:1px solid #D4AF37!important}
+
+:root {--black:#000000;--black-soft:#000000;--panel:#0b0b0b;--panel2:#0e0e0e;--panel3:#111111;--navy:#000000;--navy-2:#000000;--navy-3:#000000;--gold:#D4AF37;--gold-strong:#D4AF37;--gold-light:#D4AF37;--white:#FFFFFF;--muted:#B5B5B5;--line:rgba(212,175,55,.28);--silver:#D4AF37;--bg:#000000;--border:rgba(212,175,55,.3)}
+html,body {background:#000!important;color:#fff!important}
+#landing,.landing-card,.main,.admin-main,.reception-main{background:#000!important}
+.sidebar,.admin-sidebar,.reception-sidebar{background:#070707!important;border-color:var(--border)!important}
+.auth,.hero,.card,.booking,.summary{background:#0b0b0b!important;border-color:var(--border)!important;box-shadow:none!important}
+.primary,.slot.selected,.primary:hover,.slot.selected:hover{background:#D4AF37!important;color:#000!important;border-color:#D4AF37!important;box-shadow:none!important}
+.ghost{background:#090909!important;color:#D4AF37!important;border:1px solid #D4AF37!important}
+.nav button:hover,.nav button.active,.choice.selected{background:#17130b!important;color:#D4AF37!important;border-color:#D4AF37!important;box-shadow:none!important}
+.gold-text,.silver,.price,.metric,.pill,.muted strong{color:#D4AF37!important}
+.pill{background:#090909!important;border:1px solid #D4AF37!important}
+.choice,.slot,.field input,.field select,.field textarea{background:#080808!important;color:#fff!important;border:1px solid #3d3320!important}
+.choice.selected{background:#16120a!important}
+.field input:focus,.field textarea:focus{border-color:#D4AF37!important;outline:2px solid #D4AF3770;box-shadow:none!important}
+button:hover{filter:none!important}
+.close-modal{float:right;padding:7px 11px}
+.field textarea{width:100%;resize:vertical;background:#090909;color:#fff;padding:12px;border:1px solid #3d3320;border-radius:12px;font:inherit}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin:14px 0}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid var(--border)}
+.plan-editor{display:grid;gap:12px}
+.plan-editor input,.plan-editor textarea{max-width:100%;width:100%}
+.plan-editor .primary{width:100%}
+.plan-description{white-space:pre-line;min-height:36px}
+#scheduleNotice{min-height:22px;color:#D4AF37}
+@media(max-width:750px){#shopInfoCards{grid-template-columns:1fr!important}.summary{flex-wrap:wrap}.summary button{width:100%}}
+</style></head>
+<body>
+<section id="landing"><div class="landing-card"><img alt="Adriano Paulo Barbearia" class="logo" src="icon-maskable-512.png"/><h1>ADRIANO PAULO</h1><div class="smoke"><div id="smokeText">Precisão, estilo e cuidado em cada detalhe.</div></div><div class="landing-actions"><button class="primary" onclick="openLogin()">Entrar</button><button class="ghost" onclick="openRegister()">Criar conta</button></div><p class="muted">Agendamento • atendimento premium</p></div></section>
+<div class="modal hidden" id="authModal"><div class="auth"><button class="ghost" onclick="closeAuth()" style="float:right;padding:7px 11px">×</button><img class="logo" src="icon-maskable-512.png" style="width:72px;height:72px"/><div id="loginBox"><h2>Bem-vindo à Adriano Paulo</h2><p class="muted">Entre para agendar seu próximo atendimento.</p><div class="grid"><div class="field"><label>E-mail ou usuário interno</label><input id="loginUser" placeholder="Cliente: e-mail | Equipe: usuário" type="text"/></div><div class="field"><label>Senha</label><input id="loginPass" placeholder="••••••••" type="password"/></div><button class="primary" onclick="login()">Entrar</button></div><div class="auth-foot muted">Ainda não possui conta? <span class="link" onclick="openRegister()">Cadastre-se</span></div></div>
+<div class="hidden" id="registerBox"><h2>Criar conta</h2><p class="muted">Preencha seus dados para continuar.</p><div class="grid"><div class="field"><label>Nome completo</label><input id="regName"/></div><div class="field"><label>E-mail</label><input autocomplete="email" id="regEmail" placeholder="seuemail@exemplo.com" type="email"/></div><div class="field"><label>Telefone</label><input id="regPhone" inputmode="tel"/></div><div class="field"><label>Data de nascimento</label><input id="regBirth" type="date"/></div><div class="field"><label>Como conheceu a barbearia?</label><select id="regSource"><option value="">Selecione</option><option>Fachada da loja</option><option>Google</option><option>Indicação</option><option>Instagram</option><option>Site</option></select></div><div class="field"><label>Crie uma senha</label><input id="regPass" type="password"/></div><button class="primary" onclick="register()">Concluir cadastro</button></div><div class="auth-foot muted">Já tem conta? <span class="link" onclick="openLogin()">Entrar</span></div></div></div></div>
+<div class="hidden" id="app"><aside class="sidebar"><div class="side-brand"><img src="icon-maskable-512.png"/><div><div class="brand">AP</div><small class="muted">BARBEARIA</small></div></div><nav class="nav"><button class="active" data-sec="home" onclick="go('home',this)">⌂ <span>Início</span></button><button data-sec="appointments" onclick="go('appointments',this)">◷ <span>Agendamentos</span></button><button data-sec="club" onclick="go('club',this)">◇ <span>Barbearia</span></button><button data-sec="plans" onclick="go('plans',this)">▣ <span>Planos</span></button><button data-sec="profile" onclick="go('profile',this)">○ <span>Perfil</span></button></nav><button class="ghost logout" onclick="logout()">Sair</button></aside>
+<main class="main"><header class="topbar"><div><b id="hello">Olá</b><div class="muted">Sua experiência Adriano Paulo começa aqui.</div></div><div class="avatar" id="topAvatar">AP</div></header>
+<section class="section active" id="home">
+<div class="hero"><span class="pill">ADRIANO PAULO BARBEARIA</span><h1>Seu estilo.<br/><span class="gold-text">Nossa assinatura.</span></h1>
+<p class="muted">Atendimento personalizado em um único espaço. Selecione o serviço, a data e um horário disponível.</p>
+<div class="quick"><button class="primary" onclick="go('club')">Conhecer a Barbearia</button><button class="ghost" onclick="go('plans')">Ver planos</button></div></div>
+<div class="booking card"><h2>Agendar atendimento</h2>
+<div class="step"><h3>1. Escolha seus serviços</h3><div class="service-list" id="serviceChoices"></div></div>
+<div class="step"><h3>2. Selecione a data</h3><p class="muted">Segunda a sábado, das 08h às 20h. Domingos indisponíveis.</p><div class="field" style="max-width:300px"><input id="datePick" onchange="renderSlots()" type="date"/></div></div>
+<div class="step"><h3>3. Horários disponíveis</h3><div class="slots" id="slots"><span class="muted">Escolha os serviços e a data para ver os horários.</span></div></div>
+<div class="summary hidden" id="bookingSummary"><div><small class="muted">Total presencial</small><div class="price" id="total">R$ 0,00</div><small class="muted" id="durationTotal">Duração estimada</small></div><button class="primary" disabled="" id="bookBtn" onclick="book()">Confirmar agendamento</button></div>
+<p class="muted" id="scheduleNotice" role="status"></p>
+</div>
+</section>
+<section class="section" id="appointments"><h1 class="section-title">Agendamentos</h1><p class="muted">Próximos atendimentos e histórico completo.</p><div class="cards" id="appointmentList" style="grid-template-columns:1fr"></div></section>
+<section class="section" id="club">
+<h1 class="section-title">Barbearia</h1>
+<div class="cards" id="shopInfoCards" style="grid-template-columns:1fr 1fr"></div>
+<h2>Nosso espaço</h2><p class="muted">Conheça o ambiente da Adriano Paulo Barbearia.</p>
+<div class="gallery" id="clientShopGallery"><div class="muted">As fotos do espaço aparecerão aqui.</div></div>
+<div class="card" style="margin-top:18px"><h3>Funcionamento</h3><p><strong>Segunda a sábado:</strong> 08h às 20h</p><p class="muted"><strong>Domingo:</strong> fechado</p><p class="muted">Atendimento mediante disponibilidade de horários.</p></div>
+</section>
+<section class="section" id="plans"><h1 class="section-title">Planos</h1><p class="muted">Confira as opções cadastradas pela barbearia.</p><div class="plan-grid" id="planGrid"></div></section>
+<section class="section" id="profile"><h1 class="section-title">Perfil</h1><p class="muted">Seus dados, segurança e integrações.</p><div class="profile-grid"><div class="card"><div class="profile-photo"><div class="avatar" id="profileAvatar">AP</div><div><h3>Foto de perfil</h3><input accept="image/*" id="photoInput" onchange="setPhoto(this)" type="file"/></div></div><div class="grid" style="margin-top:18px"><div class="field"><label>Nome completo</label><input id="pName"/></div><div class="field"><label>E-mail</label><input id="pEmail" type="email"/></div><div class="field"><label>Telefone</label><input id="pPhone"/></div><div class="field"><label>Data de nascimento</label><input id="pBirth" type="date"/></div><div class="field"><label>CPF</label><input id="pCpf"/></div><div class="field"><label>CEP</label><input id="pCep" onblur="lookupCep()"/></div><div class="field"><label>Rua</label><input id="pStreet"/></div><div class="field"><label>Número</label><input id="pNumber"/></div><div class="field"><label>Bairro</label><input id="pDistrict"/></div><div class="field"><label>Cidade</label><input id="pCity"/></div><div class="field"><label>Estado</label><input id="pState"/></div><div class="field"><label>Complemento (opcional)</label><input id="pComp"/></div><button class="primary" onclick="saveProfile()">Salvar alterações</button></div></div><div><div class="card"><h3>Segurança da conta</h3><div class="switch"><div><b>Autenticação em Dois Fatores</b><div class="muted">Use Google Authenticator ou Authy.</div></div><button class="ghost" onclick="activateMFA()">Ativar 2FA</button></div><div class="switch"><div><b>Senha</b><div class="muted">Altere sua senha de acesso.</div></div><button class="ghost" onclick="changePassword()">Alterar Senha</button></div><div class="switch"><div><b>Sessões Ativas</b><div class="muted">Este navegador • sessão atual</div></div><span class="pill">Ativa</span></div></div><div class="card" style="margin-top:16px"><h3>Integrações</h3><div class="switch"><div><b>Google Agenda</b><div class="muted">Agenda da barbearia: sincronização pelo backend quando configurada.</div></div><button class="ghost" onclick="showCalendarStatus()">Ver integração</button></div><div class="switch"><div><b>Notificações</b><div class="muted">Receba lembretes e novidades.</div></div><button class="toggle on" id="notifToggle" onclick="this.classList.toggle('on')"></button></div></div></div></div><button class="ghost profile-logout-mobile" onclick="logout()">Sair da minha conta</button></section>
+</main></div>
+<div class="admin-shell hidden" id="adminApp"><aside class="admin-sidebar"><div class="side-brand"><img src="icon-maskable-512.png"/><div><div class="brand">ADRIANO ADM</div><small class="muted">GESTÃO</small></div></div><nav class="nav"><button class="active" data-adm="admDash" onclick="adminGo('admDash',this)">▦ <span>Dashboard</span></button><button data-adm="admAppointments" onclick="adminGo('admAppointments',this)">◷ <span>Agendamentos</span></button><button data-adm="admClub" onclick="adminGo('admClub',this)">◇ <span>Barbearia</span></button><button data-adm="admPlans" onclick="adminGo('admPlans',this)">▣ <span>Planos</span></button><button data-adm="admHistory" onclick="adminGo('admHistory',this)">↺ <span>Histórico</span></button></nav><button class="ghost logout" onclick="adminLogout()">Sair</button></aside><main class="admin-main"><header class="topbar"><div><b>Administração Adriano Paulo Barbearia</b><div class="muted">Faturamento, serviços e agenda</div></div><span class="pill">ADMIN</span></header>
+<section class="section active" id="admDash"><div class="card" style="margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><b>Google Agenda</b><div class="muted">Sincronizar reservas pendentes com a agenda da barbearia.</div></div><button class="ghost" onclick="syncCalendarNow()">Sincronizar agenda</button></div><h1 class="section-title">Visão geral</h1><p class="muted">Indicadores calculados a partir dos atendimentos concluídos.</p><div class="cards" id="admMetrics"></div><div class="cards" id="admExtraMetrics" style="margin-top:16px"></div><div class="cards" style="margin-top:16px"><div class="card"><h3>Plano em destaque</h3><div id="topPlan"></div></div></div><div class="card" style="margin-top:16px"><h3>Serviços mais realizados — mês atual</h3><div id="serviceRanking"></div></div></section>
+<section class="section" id="admAppointments"><h1 class="section-title">Agendamentos</h1><p class="muted">Ao concluir um atendimento, ele passa automaticamente para o histórico do cliente e entra no faturamento.</p><div class="card" style="overflow:auto"><table class="admin-table"><thead><tr><th>Cliente</th><th>Data</th><th>Serviços</th><th>Total</th><th>Status</th><th>Ação</th></tr></thead><tbody id="admApptRows"></tbody></table></div></section>
+<section class="section" id="admClub">
+<h1 class="section-title">Barbearia</h1><p class="muted">Edite o conteúdo sobre a barbearia e gerencie fotos do ambiente.</p>
+<div class="profile-grid"><div class="card"><h3>Informações da Barbearia</h3>
+<div class="grid"><div class="field"><label>Título principal</label><input id="shopTitle" maxlength="100"/></div>
+<div class="field"><label>Descrição</label><textarea id="shopDescription" maxlength="1400" rows="5"></textarea></div>
+<div class="field"><label>Título complementar</label><input id="shopSecondTitle" maxlength="100"/></div>
+<div class="field"><label>Descrição complementar</label><textarea id="shopSecondDescription" maxlength="1400" rows="4"></textarea></div>
+<button class="primary" onclick="saveShopInfo()">Salvar apresentação</button></div></div>
+<div><div class="card"><h3>Fotos da barbearia</h3><p class="muted">Envie imagens do ambiente. Elas aparecem na seção Barbearia para os clientes.</p>
+<input accept="image/*" onchange="addShopPhoto(this)" type="file"/><div class="gallery" id="shopGallery"></div></div>
+<div class="card" style="margin-top:16px"><h3>Comentários de clientes</h3>
+<div class="field"><label>Novo comentário</label><input id="newReview" placeholder="Ex.: Atendimento excelente..."/></div>
+<button class="primary" onclick="addReview()" style="margin-top:10px">Adicionar comentário</button><div class="grid" id="reviewAdminList" style="margin-top:14px"></div></div></div></div>
+</section>
+<section class="section" id="admPlans"><h1 class="section-title">Planos</h1><p class="muted">Altere nome, descrição, preço, vagas e assinantes. Salve cada plano para refletir as alterações no catálogo.</p><div class="plan-grid" id="admPlanGrid"></div></section>
+<section class="section" id="admHistory"><h1 class="section-title">Histórico mensal</h1><p class="muted">Resumo permanente dos meses anteriores e do mês atual.</p><div class="grid" id="monthHistory"></div></section>
+</main></div>
+<div class="reception-shell hidden" id="receptionApp">
+<aside class="reception-sidebar"><div class="side-brand"><img src="icon-maskable-512.png"/><div><div class="brand">ADRIANO RECEPÇÃO</div><small class="muted">ATENDIMENTO</small></div></div>
+<nav class="nav"><button class="active" data-rec="recToday" onclick="receptionGo('recToday',this)">◷ <span>Agenda de hoje</span></button><button data-rec="recPending" onclick="receptionGo('recPending',this)">⌛ <span>Pendentes</span></button><button data-rec="recDone" onclick="receptionGo('recDone',this)">✓ <span>Concluídos</span></button></nav>
+<button class="ghost logout" onclick="receptionLogout()">Sair</button></aside>
+<main class="reception-main"><header class="topbar"><div><b>Recepção Adriano Paulo Barbearia</b><div class="muted">Agenda e atendimento</div></div><span class="pill">RECEPÇÃO</span></header>
+<section class="section active" id="recToday"><h1 class="section-title">Agenda de hoje</h1><p class="muted" id="recTodayLabel"></p><div class="reception-grid" id="recTodayList"></div></section>
+<section class="section" id="recPending"><h1 class="section-title">Atendimentos pendentes</h1><p class="muted">Agendamentos ainda não concluídos.</p><div class="reception-grid" id="recPendingList"></div></section>
+<section class="section" id="recDone"><h1 class="section-title">Atendimentos concluídos</h1><p class="muted">Histórico de atendimentos finalizados.</p><div class="reception-grid" id="recDoneList"></div></section>
+</main></div>
+<div class="toast hidden" id="toast"></div>
+<script>
+const smokeMessages=['Precisão, estilo e cuidado em cada detalhe.','“Atendimento impecável e ambiente excelente.” — avaliação demonstrativa','Principal. Uma experiência Adriano Paulo.','“Profissionais atenciosos e resultado de primeira.” — avaliação demonstrativa'];let sm=0;setInterval(()=>{sm=(sm+1)%smokeMessages.length;const e=document.getElementById('smokeText');e.style.animation='none';void e.offsetWidth;e.textContent=smokeMessages[sm];e.style.animation='smoke 8s ease both'},8000);
+const SOLO_BARBER='Adriano Paulo';
+const branches={Principal:{address:'Adriano Paulo Barbearia',pros:[SOLO_BARBER]}};
+const services=[
+{id:1,name:'Corte de Cabelo',price:25,duration:40},
+{id:2,name:'Barba',price:20,duration:20},
+{id:3,name:'Cabelo + Barba',price:45,duration:45},
+{id:4,name:'Corte uma Maquina',price:20,duration:20},
+{id:5,name:'Luzes ou Reflexo',price:35,duration:120},
+{id:6,name:'Nevou',price:50,duration:120}
+];
+let state={branch:'',pro:'',services:[],date:'',time:''};
+function users(){return JSON.parse(localStorage.getItem('mh_users')||'{}')}function saveUsers(x){localStorage.setItem('mh_users',JSON.stringify(x))}function current(){return localStorage.getItem('mh_current')||''}function openLogin(){authModal.classList.remove('hidden');loginBox.classList.remove('hidden');registerBox.classList.add('hidden')}function openRegister(){authModal.classList.remove('hidden');loginBox.classList.add('hidden');registerBox.classList.remove('hidden');if(loginUser.value)regEmail.value=loginUser.value}function closeAuth(){authModal.classList.add('hidden')}
+function register(){let name=regName.value.trim(),email=regEmail.value.trim().toLowerCase(),phone=regPhone.value.trim(),birth=regBirth.value,source=regSource.value,pass=regPass.value;if(!name||!email||!phone||!birth||!source||pass.length<6)return toast('Preencha todos os campos e use uma senha com 6+ caracteres.');let u=users();u[email]={name,email,phone,birth,source,pass,profile:{}};saveUsers(u);localStorage.setItem('mh_current',email);enterApp();closeAuth();toast('Cadastro concluído. Bem-vindo à Adriano Paulo!')}
+function login(){ return adrianoLogin(); }
+function logout(){localStorage.removeItem('mh_current');app.classList.add('hidden');landing.classList.remove('hidden');toast('Você saiu da sua conta.')}
+function enterApp(){let u=users()[current()];if(!u)return;landing.classList.add('hidden');app.classList.remove('hidden');hello.textContent='Olá, '+u.name.split(' ')[0];fillProfile();renderAppointments();renderSlots()}
+function go(id,btn){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.sec===id));window.scrollTo(0,0)}
+function renderBranches(){branchChoices.innerHTML=Object.entries(branches).map(([n,v])=>`<button class="choice ${state.branch===n?'selected':''}" onclick="pickBranch('${n}')"><b>${n}</b><br><small>${v.address}</small></button>`).join('')}function pickBranch(n){state.branch=n;state.pro='';state.time='';renderBranches();proChoices.innerHTML=branches[n].pros.map(p=>`<button class="choice" onclick="pickPro(this,'${p.replaceAll("'","\\'")}')">${p}</button>`).join('');validate();renderSlots()}function pickPro(el,p){state.pro=p;state.time='';[...proChoices.children].forEach(x=>x.classList.remove('selected'));el.classList.add('selected');validate();renderSlots()}
+function renderServices(){serviceChoices.innerHTML=services.map(([n,p,from])=>`<button class="choice service" onclick="toggleService(this,'${n.replaceAll("'","\\'")}',${p})"><span>${n}</span><b>${from?'A partir de ':''}R$ ${p.toFixed(2).replace('.',',')}</b></button>`).join('')}function toggleService(el,n,p){let i=state.services.findIndex(x=>x.n===n);if(i>=0){state.services.splice(i,1);el.classList.remove('selected')}else{state.services.push({n,p});el.classList.add('selected')}state.time='';total.textContent='R$ '+state.services.reduce((s,x)=>s+x.p,0).toFixed(2).replace('.',',');validate();renderSlots()}
+function appts(){return JSON.parse(localStorage.getItem('mh_appts')||'[]')}function renderSlots(){state.date=datePick.value;slots.innerHTML='';if(!state.branch||!state.pro||!state.services.length||!state.date){slots.innerHTML='<span class="muted">Complete as etapas anteriores.</span>';validate();return}let taken=appts().filter(a=>a.branch===state.branch&&a.date===state.date&&a.status!=='Cancelado'&&(state.pro==='Sem preferência'||a.pro===state.pro)).map(a=>a.time);for(let h=8;h<=20;h++)for(let m of [0,30]){if(h===20&&m>30)continue;let t=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');let b=document.createElement('button');b.className='slot';b.textContent=t;b.disabled=taken.includes(t);b.onclick=()=>{state.time=t;document.querySelectorAll('.slot').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');validate()};slots.appendChild(b)}validate()}function validate(){
+  const started=!!(state.branch||state.pro||state.services.length||state.date||state.time);
+  const summary=document.getElementById('bookingSummary');
+  if(summary) summary.classList.toggle('hidden',!started);
+  bookBtn.disabled=!(state.branch&&state.pro&&state.services.length&&state.date&&state.time);
+}
+function book(){if(bookBtn.disabled)return;let list=appts(),u=users()[current()],pro=state.pro;if(pro==='Sem preferência'){let options=branches[state.branch].pros.filter(x=>x!=='Sem preferência');let taken=list.filter(a=>a.branch===state.branch&&a.date===state.date&&a.time===state.time&&a.status!=='Cancelado').map(a=>a.pro);pro=options.find(x=>!taken.includes(x))||'';if(!pro)return toast('Nenhum profissional disponível nesse horário.')}list.push({id:Date.now(),email:u.email,branch:state.branch,pro,services:state.services,date:state.date,time:state.time,total:state.services.reduce((s,x)=>s+x.p,0),status:'Agendado',created:new Date().toISOString()});localStorage.setItem('mh_appts',JSON.stringify(list));toast('Agendamento realizado! Pagamento na barbearia.');state.time='';renderSlots();renderAppointments()}
+function renderAppointments(){let list=appts().filter(a=>a.email===current()).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));let upcoming=list.filter(a=>a.status!=='Concluído'),old=list.filter(a=>a.status==='Concluído');let card=a=>`<div class="card appt"><div><span class="pill">${a.status}</span><h3>${a.date.split('-').reverse().join('/')} • ${a.time}</h3><div>${a.branch} • ${a.pro}</div><div class="muted">${a.services.map(x=>x.n).join(' • ')}</div><small class="muted">Pagamento presencial • ID ${a.id}</small></div><b>R$ ${a.total.toFixed(2).replace('.',',')}</b></div>`;appointmentList.innerHTML=`<h2>Próximos / Pendentes</h2>${upcoming.length?upcoming.map(card).join(''):'<div class="card muted">Nenhum agendamento pendente.</div>'}<h2 style="margin-top:24px">Antigos / Concluídos</h2>${old.length?old.map(card).join(''):'<div class="card muted">Nenhum atendimento concluído ainda.</div>'}`}
+const plans=[
+{n:'Corte ILIMITADO',p:'74,90',v:5,b:['Corte — 100% OFF • GRÁTIS • 100 gratuitos por mês','Acabamento (cantinhos do cabelo) — 100% OFF • GRÁTIS • 100 gratuitos por mês','Serviços extras — 10% OFF','Cosméticos — 10% OFF','Agenda liberada com 7 dias de antecedência'],best:true},
+{n:'Corte e Barba ILIMITADO',p:'129,90',v:2,b:['Barba — 100% OFF • GRÁTIS • 100 gratuitos por mês','Corte — 100% OFF • GRÁTIS • 100 gratuitos por mês','Acabamento (cantinhos do cabelo) — 100% OFF • GRÁTIS • 100 gratuitos por mês','Serviços extras — 10% OFF','Cosméticos — 10% OFF','Agenda liberada com 7 dias de antecedência']},
+{n:'Barba ILIMITADA',p:'89,90',v:4,b:['Barba — 100% OFF • GRÁTIS • 100 gratuitos por mês','Serviços extras — 10% OFF','Cosméticos — 10% OFF','Agenda liberada com 7 dias de antecedência']}
+];planGrid.innerHTML=plans.map(x=>`<article class="card">${x.best?'<span class="pill" style="background:#ffd21c;color:#07121c;border-color:#ffd21c;font-weight:900">MAIS VENDIDO</span> ':''}<span class="pill">${x.v} vagas restantes</span><h2>${x.n}</h2><div class="price">R$ ${x.p}</div><div class="muted">por mês • vigência indeterminada</div><ul class="benefits">${x.b.map(b=>'<li>'+b+'</li>').join('')}<li>Agenda liberada com 7 dias de antecedência</li></ul><button class="primary" onclick="toast('Plano preparado para integração de assinatura/pagamento.')">Quero este plano</button><p class="muted"><small>Termos de uso disponíveis antes da contratação.</small></p></article>`).join('');
+function fillProfile(){let u=users()[current()],p=u.profile||{};pName.value=u.name;pEmail.value=u.email;pPhone.value=u.phone;pBirth.value=u.birth;['Cpf','Cep','Street','Number','District','City','State','Comp'].forEach(k=>document.getElementById('p'+k).value=p[k.toLowerCase()]||'');if(p.photo)setPhotoUI(p.photo)}function saveProfile(){let all=users(),u=all[current()],old=current(),newEmail=pEmail.value.trim().toLowerCase();u.name=pName.value.trim();u.email=newEmail;u.phone=pPhone.value.trim();u.birth=pBirth.value;u.profile={...(u.profile||{}),cpf:pCpf.value,cep:pCep.value,street:pStreet.value,number:pNumber.value,district:pDistrict.value,city:pCity.value,state:pState.value,comp:pComp.value};if(newEmail!==old){delete all[old];all[newEmail]=u;localStorage.setItem('mh_current',newEmail)}else all[old]=u;saveUsers(all);hello.textContent='Olá, '+u.name.split(' ')[0];toast('Alterações salvas.')}
+async function lookupCep(){let cep=pCep.value.replace(/\D/g,'');if(cep.length!==8)return;try{let r=await fetch('https://viacep.com.br/ws/'+cep+'/json/');let d=await r.json();if(d.erro)return toast('CEP não encontrado.');pStreet.value=d.logradouro||'';pDistrict.value=d.bairro||'';pCity.value=d.localidade||'';pState.value=d.uf||''}catch(e){toast('Não foi possível consultar o CEP agora.')}}function setPhoto(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{let all=users(),u=all[current()];u.profile={...(u.profile||{}),photo:r.result};all[current()]=u;saveUsers(all);setPhotoUI(r.result)};r.readAsDataURL(f)}function setPhotoUI(src){profileAvatar.innerHTML=`<img src="${src}">`;topAvatar.innerHTML=`<img src="${src}">`}function changePassword(){let n=prompt('Digite a nova senha (mínimo 6 caracteres):');if(!n)return;if(n.length<6)return toast('A senha precisa ter pelo menos 6 caracteres.');let all=users();all[current()].pass=n;saveUsers(all);toast('Senha alterada neste protótipo.')}function demoIntegration(x){toast(x+' requer integração segura no backend antes de ser ativado.')}function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.add('hidden'),3200)}
+
+const ADMIN_EMAIL='Adri@no8809';
+const defaultStaff=[{name:'Sem preferência',branch:'Principal',quality:'Atendimento Adriano Paulo',specialty:'Serviços da barbearia',photo:''}];
+function staffData(){let x=JSON.parse(localStorage.getItem('mh_staff')||'null');if(!x){x=defaultStaff;localStorage.setItem('mh_staff',JSON.stringify(x))}return x}function saveStaff(x){localStorage.setItem('mh_staff',JSON.stringify(x))}
+function planData(){let x=JSON.parse(localStorage.getItem('mh_plan_admin')||'null');if(!x){x=[{name:'Corte ILIMITADO',price:74.90,vacancies:5,subs:0},{name:'Corte e Barba ILIMITADO',price:129.90,vacancies:2,subs:0},{name:'Barba ILIMITADA',price:89.90,vacancies:4,subs:0}];localStorage.setItem('mh_plan_admin',JSON.stringify(x))}return x}function savePlanData(x){localStorage.setItem('mh_plan_admin',JSON.stringify(x))}
+function enterAdmin(){landing.classList.add('hidden');app.classList.add('hidden');adminApp.classList.remove('hidden');renderAdminAll()}function adminLogout(){localStorage.removeItem('mh_admin');adminApp.classList.add('hidden');landing.classList.remove('hidden');toast('Sessão administrativa encerrada.')}function adminGo(id,btn){document.querySelectorAll('#adminApp .section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('#adminApp .nav button').forEach(x=>x.classList.toggle('active',x.dataset.adm===id));renderAdminAll();window.scrollTo(0,0)}
+function monthKey(d=new Date()){return d.toISOString().slice(0,7)}function money(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',')}function completed(){return appts().filter(a=>a.status==='Concluído')}
+function monthStats(key){let list=completed().filter(a=>a.date.slice(0,7)===key),staff={};list.forEach(a=>{let k=a.pro;staff[k]??={revenue:0,appointments:0,services:0};staff[k].revenue+=Number(a.total||0);staff[k].appointments++;staff[k].services+=(a.services||[]).length});return{key,revenue:list.reduce((s,a)=>s+Number(a.total||0),0),appointments:list.length,services:list.reduce((s,a)=>s+(a.services||[]).length,0),staff}}
+function weekStats(){let now=new Date(),start=new Date(now);start.setDate(now.getDate()-6);let list=completed().filter(a=>new Date(a.date+'T12:00:00')>=start),m={};list.forEach(a=>{m[a.pro]=(m[a.pro]||0)+(a.services||[]).length});return m}
+function archiveStats(){let h=JSON.parse(localStorage.getItem('mh_month_history')||'{}');let keys=[...new Set(completed().map(a=>a.date.slice(0,7)))];keys.forEach(k=>h[k]=monthStats(k));localStorage.setItem('mh_month_history',JSON.stringify(h));return h}
+function renderDashboard(){let st=monthStats(monthKey()),entries=Object.entries(st.staff).sort((a,b)=>b[1].revenue-a[1].revenue),serviceRank=Object.entries(st.staff).sort((a,b)=>b[1].services-a[1].services),week=Object.entries(weekStats()).sort((a,b)=>b[1]-a[1]),pd=planData(),best=[...pd].sort((a,b)=>b.price*b.subs-a.price*a.subs)[0];admMetrics.innerHTML=`<div class="card"><span class="muted">Faturamento do mês</span><div class="metric">${money(st.revenue)}</div></div><div class="card"><span class="muted">Atendimentos concluídos</span><div class="metric">${st.appointments}</div></div><div class="card"><span class="muted">Serviços realizados</span><div class="metric">${st.services}</div></div>`;topRevenue.innerHTML=entries.length?`<div class="metric">${entries[0][0]}</div><div class="muted">${money(entries[0][1].revenue)} no mês</div>`:'<span class="muted">Sem dados concluídos neste mês.</span>';topServices.innerHTML=serviceRank.length?`<b>Mês: ${serviceRank[0][0]}</b><div class="muted">${serviceRank[0][1].services} serviços</div><br><b>Semana: ${week[0]?.[0]||'—'}</b><div class="muted">${week[0]?.[1]||0} serviços nos últimos 7 dias</div>`:'<span class="muted">Sem dados concluídos.</span>';topPlan.innerHTML=best&&best.subs?`<div class="metric">${best.name}</div><div class="muted">${best.subs} assinantes • ${money(best.price*best.subs)}/mês</div>`:'<span class="muted">Informe assinantes nos planos para acompanhar.</span>';let max=entries[0]?.[1].revenue||1;staffRevenue.innerHTML=entries.length?entries.map(([n,v])=>`<tr><td>${n}<div class="chartbar"><i style="width:${Math.max(4,v.revenue/max*100)}%"></i></div></td><td>${v.services}</td><td>${v.appointments}</td><td><b>${money(v.revenue)}</b></td></tr>`).join(''):'<tr><td colspan="4" class="muted">Nenhum atendimento concluído neste mês.</td></tr>'}
+function userPhoto(email){let u=users()[email];return u?.profile?.photo||''}function staffPhoto(name){return staffData().find(x=>x.name===name)?.photo||''}
+function renderAdminAppointments(){let list=appts().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));admApptRows.innerHTML=list.length?list.map(a=>{let u=users()[a.email]||{},cp=userPhoto(a.email),sp=staffPhoto(a.pro);return `<tr><td><div style="display:flex;gap:9px;align-items:center">${cp?`<img class="mini-avatar" src="${cp}">`:`<span class="mini-avatar" style="display:grid;place-items:center">${(u.name||'?')[0]}</span>`}<div><b>${u.name||a.email}</b><br><small class="muted">${u.phone||a.email}</small></div></div></td><td>${a.date.split('-').reverse().join('/')}<br>${a.time} • ${a.branch}</td><td><div style="display:flex;gap:8px;align-items:center">${sp?`<img class="mini-avatar" src="${sp}">`:''}<span>${a.pro}</span></div></td><td>${a.services.map(x=>x.n).join('<br>')}</td><td>${money(a.total)}</td><td class="${a.status==='Concluído'?'status-done':'status-pending'}">${a.status}</td><td>${a.status==='Concluído'?'<span class="pill">Concluído</span>':`<button class="primary" onclick="completeAppt(${a.id})">Marcar concluído</button>`}</td></tr>`}).join(''):'<tr><td colspan="7" class="muted">Nenhum agendamento.</td></tr>'}
+function completeAppt(id){let l=appts(),a=l.find(x=>x.id===id);if(!a)return;a.status='Concluído';a.completedAt=new Date().toISOString();localStorage.setItem('mh_appts',JSON.stringify(l));archiveStats();renderAdminAll();toast('Atendimento concluído e enviado ao histórico do cliente.')}
+function renderStaffEditor(){staffEditor.innerHTML=staffData().map((x,i)=>`<div class="card staff-row">${x.photo?`<img class="mini-avatar" src="${x.photo}">`:'<div class="mini-avatar" style="display:grid;place-items:center">JM</div>'}<div><b>${x.name}</b><div class="muted">${x.branch} • ${x.specialty}</div><small>${x.quality}</small></div><div class="admin-actions"><label class="ghost" style="cursor:pointer">Foto<input type="file" accept="image/*" hidden onchange="staffPhotoUpload(${i},this)"></label><button class="ghost" onclick="editStaff(${i})">Editar</button></div></div>`).join('')}
+function staffPhotoUpload(i,inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{let s=staffData();s[i].photo=r.result;saveStaff(s);renderAdminAll()};r.readAsDataURL(f)}function editStaff(i){let s=staffData(),x=s[i],name=prompt('Nome do funcionário:',x.name);if(!name)return;let specialty=prompt('Especialização:',x.specialty)??x.specialty,quality=prompt('Qualidades / descrição:',x.quality)??x.quality;x.name=name;x.specialty=specialty;x.quality=quality;saveStaff(s);renderAdminAll();toast('Perfil do funcionário atualizado.')}
+function shopPhotos(){return JSON.parse(localStorage.getItem('mh_shop_photos')||'[]')}function addShopPhoto(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{let x=shopPhotos();x.push(r.result);localStorage.setItem('mh_shop_photos',JSON.stringify(x));renderClubAdmin()};r.readAsDataURL(f)}function reviews(){return JSON.parse(localStorage.getItem('mh_reviews')||'[]')}function addReview(){let t=newReview.value.trim();if(!t)return;let x=reviews();x.unshift(t);localStorage.setItem('mh_reviews',JSON.stringify(x));newReview.value='';renderClubAdmin();toast('Comentário adicionado.')}function deleteReview(i){let x=reviews();x.splice(i,1);localStorage.setItem('mh_reviews',JSON.stringify(x));renderClubAdmin()}
+function renderClubAdmin(){renderStaffEditor();let ph=shopPhotos();shopGallery.innerHTML=ph.length?ph.map(x=>`<div><img src="${x}" style="width:100%;height:100%;object-fit:cover;border-radius:18px"></div>`).join(''):'<div>Adicione fotos da barbearia</div>';reviewAdminList.innerHTML=reviews().length?reviews().map((x,i)=>`<div class="admin-note">“${x}” <button class="ghost" style="float:right;padding:4px 8px" onclick="deleteReview(${i})">Excluir</button></div>`).join(''):'<span class="muted">Nenhum comentário cadastrado.</span>'}
+function renderAdminPlans(){admPlanGrid.innerHTML=planData().map((x,i)=>`<div class="card"><h3>${x.name}</h3><div class="field"><label>Preço mensal</label><input type="number" step="0.01" value="${x.price}" onchange="updatePlan(${i},'price',this.value)"></div><div class="field"><label>Vagas restantes</label><input type="number" value="${x.vacancies}" onchange="updatePlan(${i},'vacancies',this.value)"></div><div class="field"><label>Assinantes ativos</label><input type="number" value="${x.subs}" onchange="updatePlan(${i},'subs',this.value)"></div><div class="metric">${money(x.price*x.subs)}</div><div class="muted">faturamento mensal informado</div><button class="ghost" style="margin-top:12px" onclick="editPlanName(${i})">Editar nome</button></div>`).join('')}function updatePlan(i,k,v){let x=planData();x[i][k]=Number(v)||0;savePlanData(x);renderDashboard()}function editPlanName(i){let x=planData(),n=prompt('Nome do plano:',x[i].name);if(n){x[i].name=n;savePlanData(x);renderAdminAll()}}
+function renderHistory(){let h=archiveStats(),keys=Object.keys(h).sort().reverse();monthHistory.innerHTML=keys.length?keys.map(k=>{let x=h[k],staff=Object.entries(x.staff||{}).sort((a,b)=>b[1].revenue-a[1].revenue);return `<div class="card"><h2>${k.split('-').reverse().join('/')}</h2><div class="cards"><div><span class="muted">Faturamento</span><div class="metric">${money(x.revenue)}</div></div><div><span class="muted">Atendimentos</span><div class="metric">${x.appointments}</div></div><div><span class="muted">Serviços</span><div class="metric">${x.services}</div></div></div><div style="margin-top:12px">${staff.map(([n,v])=>`<div class="switch"><span>${n}</span><b>${money(v.revenue)} • ${v.services} serviços</b></div>`).join('')}</div></div>`}).join(''):'<div class="card muted">O histórico será criado conforme atendimentos forem concluídos.</div>'}
+function renderAdminAll(){renderDashboard();renderAdminAppointments();renderClubAdmin();renderAdminPlans();renderHistory()}
+
+
+function localDateKey(){let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function enterReception(){landing.classList.add('hidden');app.classList.add('hidden');adminApp.classList.add('hidden');receptionApp.classList.remove('hidden');renderReception()}
+function receptionLogout(){localStorage.removeItem('mh_reception');receptionApp.classList.add('hidden');landing.classList.remove('hidden');toast('Sessão da recepção encerrada.')}
+function receptionGo(id,btn){document.querySelectorAll('#receptionApp .section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('#receptionApp .nav button').forEach(x=>x.classList.toggle('active',x.dataset.rec===id));renderReception();window.scrollTo(0,0)}
+function receptionCard(a){let u=users()[a.email]||{},photo=userPhoto(a.email),done=a.status==='Concluído';return `<article class="card reception-appt ${done?'done':''}"><div style="display:flex;gap:12px;align-items:center">${photo?`<img class="mini-avatar" src="${photo}">`:`<span class="mini-avatar" style="display:grid;place-items:center">${(u.name||'?')[0]}</span>`}<div><div class="appt-time">${a.time}</div><b>${u.name||a.email}</b><div class="muted">${u.phone||''}</div></div></div><div class="switch"><span>Profissional</span><b>${a.pro}</b></div><div class="switch"><span>Serviços</span><b style="text-align:right">${(a.services||[]).map(x=>x.n).join(' • ')}</b></div><div class="switch"><span>Total</span><b>${money(a.total)}</b></div><span class="pill">${a.status}</span><div class="reception-actions">${done?'<span class="pill">✓ Atendimento concluído</span>':`<button class="primary complete-btn" onclick="receptionComplete(${a.id},this)">✓ Concluir atendimento</button><button class="ghost" onclick="toast('Atendimento mantido como pendente.')">Manter pendente</button>`}</div></article>`}
+function renderReception(){let list=appts().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),today=localDateKey(),todayList=list.filter(a=>a.date===today),pending=list.filter(a=>a.status!=='Concluído'&&a.status!=='Cancelado'),done=list.filter(a=>a.status==='Concluído').reverse();let fmt=new Date(today+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});recTodayLabel.textContent=fmt.charAt(0).toUpperCase()+fmt.slice(1);recTodayList.innerHTML=todayList.length?todayList.map(receptionCard).join(''):'<div class="card muted">Nenhum agendamento para hoje.</div>';recPendingList.innerHTML=pending.length?pending.map(receptionCard).join(''):'<div class="card muted">Nenhum atendimento pendente.</div>';recDoneList.innerHTML=done.length?done.map(receptionCard).join(''):'<div class="card muted">Nenhum atendimento concluído.</div>'}
+function receptionComplete(id,btn){btn.classList.remove('burst');void btn.offsetWidth;btn.classList.add('burst');setTimeout(()=>{let l=appts(),a=l.find(x=>x.id===id);if(!a)return;a.status='Concluído';a.completedAt=new Date().toISOString();localStorage.setItem('mh_appts',JSON.stringify(l));archiveStats();renderReception();toast('Atendimento concluído! Dashboard atualizado.')},380)}
+function advancedAdminMetrics(){let all=completed(),now=new Date(),year=String(now.getFullYear()),mk=monthKey(),month=all.filter(a=>a.date.slice(0,7)===mk),yearly=all.filter(a=>a.date.slice(0,4)===year),yr=yearly.reduce((s,a)=>s+Number(a.total||0),0),mr=month.reduce((s,a)=>s+Number(a.total||0),0),ticket=month.length?mr/month.length:0,clients=new Set(month.map(a=>a.email)).size;admExtraMetrics.innerHTML=`<div class="card"><span class="muted">Faturamento do ano</span><div class="metric">${money(yr)}</div></div><div class="card"><span class="muted">Ticket médio do mês</span><div class="metric">${money(ticket)}</div></div><div class="card"><span class="muted">Clientes atendidos no mês</span><div class="metric">${clients}</div></div>`;let rank={};month.forEach(a=>(a.services||[]).forEach(s=>{rank[s.n]??={qty:0,revenue:0};rank[s.n].qty++;rank[s.n].revenue+=Number(s.p||0)}));let rows=Object.entries(rank).sort((a,b)=>b[1].qty-a[1].qty);serviceRanking.innerHTML=rows.length?rows.map(([n,v],i)=>`<div class="switch"><span><b>${i+1}º ${n}</b></span><span>${v.qty} realizados • ${money(v.revenue)}</span></div>`).join(''):'<span class="muted">Nenhum serviço concluído neste mês.</span>'}
+const originalRenderAdminAll=renderAdminAll;renderAdminAll=function(){originalRenderAdminAll();advancedAdminMetrics()}
+
+// A inicialização é feita pelo novo núcleo de agenda e autenticação.
+/* Adriano Paulo • Núcleo 2.0
+   Em produção: Supabase Auth + RLS + Edge Functions.
+   Modo de prévia isolado em demonstracao.html. Nunca publique a prévia como sistema real. */
+const AP_CFG=window.APP_CONFIG||{};
+const PREVIEW=AP_CFG.previewMode===true;
+const CLOUD=!!(!PREVIEW && AP_CFG.supabaseUrl && AP_CFG.supabasePublishableKey);
+const AP_GOLD='#D4AF37';
+const BUSINESS_TZ='America/Recife';
+let db=null, cloudUser=null, cloudRole='client', cloudAppointments=[], cloudPlans=[], cloudShopInfo=null, cloudShopPhotos=[], cloudProfiles={}, cloudReviews=[];
+let pendingRole='client', mfaFlow='', mfaFactorId='', mfaRequired=false;
+let apSyncTimer=null;
+const previewStaff={
+  'demo_adm':{password:'demo1234',role:'admin'},
+  'demo_recepcao':{password:'demo1234',role:'reception'}
+};
+const DEFAULT_SHOP={title:'Sobre a Adriano Paulo Barbearia',description:'Um espaço dedicado ao cuidado pessoal, com atenção aos detalhes e atendimento individualizado.',second_title:'Nossa proposta',second_description:'Valorizar o seu estilo em cada atendimento, com um ambiente acolhedor e serviços realizados com precisão.'};
+const PLAN_DEFAULTS=[
+  {id:1,name:'Corte ILIMITADO',description:'Cortes de cabelo conforme as condições do plano.',price:74.90,vacancies:5,subs:0,best:true},
+  {id:2,name:'Corte e Barba ILIMITADO',description:'Corte de cabelo e barba conforme as condições do plano.',price:129.90,vacancies:2,subs:0,best:false},
+  {id:3,name:'Barba ILIMITADA',description:'Cuidados de barba conforme as condições do plano.',price:89.90,vacancies:4,subs:0,best:false}
+];
+function el(id){return document.getElementById(id)}
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function updateStatus(id,message){const e=el(id);if(e)e.textContent=message}
+function dateRecife(date=new Date()){
+  const items=new Intl.DateTimeFormat('en-US',{timeZone:BUSINESS_TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+  const map=Object.fromEntries(items.map(x=>[x.type,x.value]));return `${map.year}-${map.month}-${map.day}`;
+}
+function timeRecife(date=new Date()){
+  const items=new Intl.DateTimeFormat('en-US',{timeZone:BUSINESS_TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);
+  const map=Object.fromEntries(items.map(x=>[x.type,x.value]));return `${map.hour}:${map.minute}`;
+}
+function minutes(s){const [h,m]=String(s).slice(0,5).split(':').map(Number);return h*60+m}
+function minuteLabel(n){return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`}
+function durationOf(items){return (items||[]).reduce((sum,s)=>sum+(Number(s.duration)||services.find(x=>x.id===s.id||x.name===s.n)?.duration||30),0)}
+function overlaps(start,end,start2,end2){return start<end2 && start2<end}
+function openDate(d){return d && new Date(`${d}T12:00:00-03:00`).getUTCDay()!==0}
+function isDateInFuture(d){return d>=dateRecife()}
+function isTaken(day,start,duration){return appts().some(a=>{
+  if(a.date!==day || a.status==='Cancelado')return false;
+  const aStart=minutes(a.time);const aEnd=aStart+(Number(a.duration)||durationOf(a.services));
+  return overlaps(start,start+duration,aStart,aEnd);
+})}
+function isValidSlot(day,time,duration){
+  if(!isDateInFuture(day)||!openDate(day)||duration<=0)return false;
+  const start=minutes(time),end=start+duration;
+  if(start<8*60||end>20*60)return false;
+  if(day===dateRecife() && time<=timeRecife())return false;
+  return !isTaken(day,start,duration);
+}
+function users(){
+  if(!CLOUD)return JSON.parse(localStorage.getItem('mh_users')||'{}');
+  const result={...cloudProfiles};
+  if(cloudUser?.email)result[cloudUser.email]=cloudUser;
+  return result;
+}
+function current(){return CLOUD?(cloudUser?.email||''):(localStorage.getItem('mh_current')||'')}
+function appts(){return CLOUD?cloudAppointments:JSON.parse(localStorage.getItem('mh_appts')||'[]')}
+function planData(){
+  if(CLOUD)return cloudPlans;
+  let p=JSON.parse(localStorage.getItem('ap_plans_v2')||'null');
+  if(!Array.isArray(p)){
+    const old=JSON.parse(localStorage.getItem('mh_plan_admin')||'null');
+    p=PLAN_DEFAULTS.map((d,i)=>({...d,...(old?.[i]||{}),description:old?.[i]?.description||d.description}));
+    localStorage.setItem('ap_plans_v2',JSON.stringify(p));
+  }
+  return p;
+}
+function savePlanData(x){if(!CLOUD)localStorage.setItem('ap_plans_v2',JSON.stringify(x))}
+function shopInfo(){if(CLOUD)return cloudShopInfo||DEFAULT_SHOP;return JSON.parse(localStorage.getItem('ap_shop_info')||'null')||DEFAULT_SHOP}
+function shopPhotos(){return CLOUD?cloudShopPhotos:JSON.parse(localStorage.getItem('mh_shop_photos')||'[]')}
+function reviews(){return CLOUD?cloudReviews.map(x=>x.body):JSON.parse(localStorage.getItem('mh_reviews')||'[]')}
+function renderServices(){
+  el('serviceChoices').innerHTML=services.map(s=>`<button type="button" class="choice service" data-sid="${s.id}" onclick="toggleService(this,${s.id})"><span>${esc(s.name)}<br><small class="muted">${s.duration} minutos</small></span><b>${money(s.price)}</b></button>`).join('');
+}
+function toggleService(button,id){
+  const svc=services.find(x=>x.id===id);if(!svc)return;
+  const ix=state.services.findIndex(x=>x.id===id);
+  if(ix>=0)state.services.splice(ix,1);
+  else state.services.push({id:svc.id,n:svc.name,p:svc.price,duration:svc.duration});
+  document.querySelectorAll('[data-sid]').forEach(b=>b.classList.toggle('selected',state.services.some(x=>x.id===Number(b.dataset.sid))));
+  state.time='';el('total').textContent=money(state.services.reduce((s,x)=>s+x.p,0));
+  el('durationTotal').textContent=`Duração estimada: ${durationOf(state.services)} minutos`;
+  renderSlots();
+}
+function validate(){
+  const summary=el('bookingSummary');
+  if(summary)summary.classList.toggle('hidden',!state.services.length);
+  el('bookBtn').disabled=!(state.services.length&&state.date&&state.time&&isValidSlot(state.date,state.time,durationOf(state.services)));
+}
+function renderSlots(){
+  state.branch='Principal';state.pro=SOLO_BARBER;state.date=el('datePick').value;state.time='';
+  const box=el('slots');box.replaceChildren();
+  if(!state.services.length||!state.date){box.textContent='Escolha os serviços e a data.';validate();return}
+  if(!isDateInFuture(state.date)){box.textContent='Selecione uma data válida a partir de hoje.';validate();return}
+  if(!openDate(state.date)){box.textContent='A barbearia não realiza atendimentos aos domingos.';validate();return}
+  const dur=durationOf(state.services);let count=0;
+  for(let minute=8*60;minute+dur<=20*60;minute+=15){
+    const time=minuteLabel(minute),button=document.createElement('button');
+    button.type='button';button.className='slot';button.textContent=time;
+    button.disabled=!isValidSlot(state.date,time,dur);
+    button.setAttribute('aria-label',`${time}${button.disabled?' indisponível':' disponível'}`);
+    button.onclick=()=>{state.time=time;box.querySelectorAll('.slot').forEach(x=>x.classList.remove('selected'));button.classList.add('selected');validate()};
+    box.append(button);if(!button.disabled)count++;
+  }
+  updateStatus('scheduleNotice',count?`Horários livres: ${count}. Cada atendimento reserva a duração integral dos serviços.`:'Nenhum horário livre nesta data para a duração escolhida.');
+  validate();
+}
+async function book(){
+  const button=el('bookBtn');if(button.disabled)return;
+  const duration=durationOf(state.services);
+  if(!isValidSlot(state.date,state.time,duration)){toast('Este horário não está mais disponível. Escolha outro.');renderSlots();return}
+  const user=users()[current()];
+  if(!user){toast('Entre na sua conta para reservar.');return}
+  const appointment={id:Date.now(),email:current(),branch:'Principal',pro:SOLO_BARBER,services:state.services.map(x=>({...x})),
+    date:state.date,time:state.time,duration,total:state.services.reduce((s,x)=>s+x.p,0),status:'Agendado',created:new Date().toISOString()};
+  button.disabled=true;
+  if(CLOUD){
+    try{
+      const {data,error}=await db.functions.invoke('create-booking',{body:{date:state.date,time:state.time,services:state.services.map(x=>x.id)}});
+      if(error)throw error;
+      if(data?.error)throw Error(data.error);
+      await loadCloudBookings();
+      toast('Agendamento confirmado!');
+    }catch(e){toast(`Não foi possível agendar: ${e.message||'Verifique a disponibilidade'}`);await loadCloudBookings().catch(()=>{});renderSlots();return}
+  }else{
+    const list=appts();if(isTaken(appointment.date,minutes(appointment.time),duration)){toast('Horário acabou de ser reservado.');renderSlots();return}
+    list.push(appointment);localStorage.setItem('mh_appts',JSON.stringify(list));toast('Agendamento realizado na prévia local.');
+  }
+  state.time='';renderSlots();renderAppointments();
+}
+function calendarLink(a){
+  const isoDate=a.date.replaceAll('-','');const start=a.time.replace(':','')+'00';
+  const endDate=new Date(`${a.date}T${a.time}:00-03:00`);endDate.setMinutes(endDate.getMinutes()+(a.duration||durationOf(a.services)));
+  const endDay=dateRecife(endDate).replaceAll('-','');
+  const endHH=timeRecife(endDate).replace(':','')+'00';
+  const params=new URLSearchParams({action:'TEMPLATE',text:'Adriano Paulo Barbearia - '+(a.services||[]).map(s=>s.n).join(' + '),dates:`${isoDate}T${start}/${endDay}T${endHH}`,ctz:BUSINESS_TZ,details:'Atendimento agendado na Adriano Paulo Barbearia.'});
+  return 'https://calendar.google.com/calendar/render?'+params.toString();
+}
+function renderAppointments(){
+  const list=appts().filter(x=>x.email===current()).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  const pending=list.filter(x=>x.status!=='Concluído'&&x.status!=='Cancelado'),done=list.filter(x=>x.status==='Concluído');
+  const card=a=>`<article class="card appt"><div><span class="pill">${esc(a.status)}</span><h3>${esc(a.date.split('-').reverse().join('/'))} • ${esc(a.time)}</h3>
+<div class="muted">${(a.services||[]).map(s=>esc(s.n)).join(' • ')}</div><small class="muted">Duração: ${a.duration||durationOf(a.services)} minutos • Pagamento presencial</small>
+<div style="margin-top:8px"><a class="ghost" href="${esc(calendarLink(a))}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 12px;border-radius:12px">Adicionar ao Google Agenda</a></div></div>
+<b>${money(a.total)}</b></article>`;
+  el('appointmentList').innerHTML=`<h2>Próximos / Pendentes</h2>${pending.length?pending.map(card).join(''):'<div class="card muted">Nenhum agendamento pendente.</div>'}
+  <h2 style="margin-top:24px">Histórico concluído</h2>${done.length?done.map(card).join(''):'<div class="card muted">Nenhum atendimento concluído.</div>'}`;
+}
+function renderClientPlans(){
+  el('planGrid').innerHTML=planData().map(p=>`<article class="card">
+  ${p.best?'<span class="pill">DESTAQUE</span>':''}<span class="pill">${Number(p.vacancies)||0} vagas restantes</span>
+  <h2>${esc(p.name)}</h2><div class="price">${money(p.price)}</div><div class="muted">por mês</div>
+  <p class="plan-description">${esc(p.description||'Consulte as condições na barbearia.')}</p>
+  <button class="primary" onclick="toast('Consulte a barbearia para contratar este plano.')">Consultar plano</button>
+  </article>`).join('');
+}
+function renderAdminPlans(){
+  el('admPlanGrid').innerHTML=planData().map((p,i)=>`<article class="card plan-editor" data-plan="${i}">
+    <h3>Plano ${i+1}</h3><div class="field"><label>Nome do plano</label><input data-field="name" maxlength="100" value="${esc(p.name)}"></div>
+    <div class="field"><label>Descrição do plano</label><textarea data-field="description" rows="5" maxlength="1200">${esc(p.description)}</textarea></div>
+    <div class="field"><label>Preço mensal (R$)</label><input data-field="price" type="number" min="0" step="0.01" value="${esc(p.price)}"></div>
+    <div class="field"><label>Vagas restantes</label><input data-field="vacancies" type="number" min="0" step="1" value="${esc(p.vacancies)}"></div>
+    <div class="field"><label>Assinantes ativos</label><input data-field="subs" type="number" min="0" step="1" value="${esc(p.subs)}"></div>
+    <div class="muted">Receita informada: ${money(Number(p.price)*Number(p.subs))}/mês</div>
+    <button class="primary" onclick="savePlanEditor(${i})">Salvar nome e descrição</button></article>`).join('');
+}
+async function savePlanEditor(index){
+  const wrapper=el('admPlanGrid').querySelector(`[data-plan="${index}"]`),all=planData(),old=all[index];if(!old)return;
+  const val=k=>wrapper.querySelector(`[data-field="${k}"]`).value;
+  const changed={name:val('name').trim(),description:val('description').trim(),price:Number(val('price')),
+    vacancies:Number(val('vacancies')),subs:Number(val('subs'))};
+  if(!changed.name||!changed.description||![changed.price,changed.vacancies,changed.subs].every(Number.isFinite)||changed.price<0||changed.vacancies<0||changed.subs<0||![changed.subs,changed.vacancies].every(Number.isInteger)){
+    toast('Preencha corretamente o nome, a descrição e os números do plano.');return;
+  }
+  if(CLOUD){
+    const {error}=await db.from('plans').update({name:changed.name,description:changed.description,price:changed.price,vacancies:changed.vacancies,subscribers:changed.subs}).eq('id',old.id);
+    if(error){toast('Erro ao salvar plano: '+error.message);return}
+    await loadCloudPlans();
+  }else{all[index]={...old,...changed};savePlanData(all)}
+  renderClientPlans();renderAdminPlans();renderDashboard();toast('Plano atualizado para os clientes.');
+}
+function renderClientBarbershop(){
+  const info=shopInfo();el('shopInfoCards').innerHTML=`<article class="card"><h3>${esc(info.title)}</h3><p class="muted">${esc(info.description)}</p></article>
+  <article class="card"><h3>${esc(info.second_title)}</h3><p class="muted">${esc(info.second_description)}</p></article>`;
+  const photos=shopPhotos();el('clientShopGallery').innerHTML=photos.length?photos.map(p=>`<img src="${esc(p)}" loading="lazy" alt="Fotografia da Barbearia Adriano Paulo">`).join(''):'<div class="card muted">As imagens da barbearia serão adicionadas aqui.</div>';
+}
+function renderClubAdmin(){
+  const info=shopInfo();['shopTitle','shopDescription','shopSecondTitle','shopSecondDescription'].forEach((id,i)=>{
+    const value=[info.title,info.description,info.second_title,info.second_description][i];
+    if(el(id) && document.activeElement!==el(id))el(id).value=value||'';
+  });
+  const p=shopPhotos();el('shopGallery').innerHTML=p.length?p.map((x,i)=>`<div><img src="${esc(x)}" alt="Foto da barbearia"><button class="ghost" onclick="removeShopPhoto(${i})" style="margin-top:8px">Remover</button></div>`).join(''):'<div class="muted">Adicione fotos do espaço.</div>';
+  el('reviewAdminList').innerHTML=reviews().length?reviews().map((x,i)=>`<div class="admin-note">“${esc(x)}” <button class="ghost" style="float:right;padding:4px 8px" onclick="deleteReview(${i})">Excluir</button></div>`).join(''):'<span class="muted">Nenhum comentário cadastrado.</span>';
+}
+async function saveShopInfo(){
+  const info={title:el('shopTitle').value.trim(),description:el('shopDescription').value.trim(),second_title:el('shopSecondTitle').value.trim(),second_description:el('shopSecondDescription').value.trim()};
+  if(Object.values(info).some(x=>!x)){toast('Preencha os títulos e as descrições.');return}
+  if(CLOUD){const {error}=await db.from('shop_settings').update(info).eq('id',1);if(error){toast(error.message);return}cloudShopInfo=info}
+  else localStorage.setItem('ap_shop_info',JSON.stringify(info));
+  renderClientBarbershop();toast('Apresentação da barbearia atualizada.');
+}
+async function addShopPhoto(input){
+  const file=input.files?.[0];if(!file)return;
+  if(!file.type.startsWith('image/')||file.size>5*1024*1024){toast('Envie uma imagem de até 5 MB.');return}
+  if(CLOUD){
+    const name=`${crypto.randomUUID()}.${(file.type.split('/')[1]||'jpg').replace(/[^a-zA-Z0-9]/g,'')}`;
+    const {error}=await db.storage.from('shop-photos').upload(name,file,{contentType:file.type,upsert:false});
+    if(error){toast(error.message);return}
+    const url=db.storage.from('shop-photos').getPublicUrl(name).data.publicUrl;
+    const {error:insertError}=await db.from('shop_photos').insert({url,object_path:name});
+    if(insertError){await db.storage.from('shop-photos').remove([name]);toast(insertError.message);return}
+    await loadCloudShop();
+  }else{
+    const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+    try{const ph=shopPhotos();ph.push(data);localStorage.setItem('mh_shop_photos',JSON.stringify(ph))}catch{toast('Armazenamento local cheio. Use imagens menores ou configure o backend.');return}
+  }
+  input.value='';renderClubAdmin();renderClientBarbershop();toast('Foto adicionada.');
+}
+async function removeShopPhoto(i){
+  if(CLOUD){const item=cloudPhotoItems[i];if(!item)return;const {error}=await db.from('shop_photos').delete().eq('id',item.id);if(error){toast(error.message);return}await db.storage.from('shop-photos').remove([item.object_path]);await loadCloudShop()}
+  else {const photos=shopPhotos();photos.splice(i,1);localStorage.setItem('mh_shop_photos',JSON.stringify(photos))}
+  renderClubAdmin();renderClientBarbershop();
+}
+let cloudPhotoItems=[];
+async function addReview(){let body=el('newReview').value.trim();if(!body)return;
+  if(CLOUD){const {error}=await db.from('shop_reviews').insert({body});if(error){toast(error.message);return}await loadCloudShop()}
+  else{const a=reviews();a.unshift(body);localStorage.setItem('mh_reviews',JSON.stringify(a))}
+  el('newReview').value='';renderClubAdmin();toast('Comentário adicionado.');
+}
+async function deleteReview(i){
+  if(CLOUD){const x=cloudReviews[i];if(!x)return;const {error}=await db.from('shop_reviews').delete().eq('id',x.id);if(error){toast(error.message);return}await loadCloudShop()}
+  else{const a=reviews();a.splice(i,1);localStorage.setItem('mh_reviews',JSON.stringify(a))}
+  renderClubAdmin();
+}
+function renderAdminAppointments(){
+  const list=[...appts()].sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  el('admApptRows').innerHTML=list.length?list.map(a=>{
+    const u=users()[a.email]||{},name=u.name||a.email||'Cliente';
+    const photo=userPhoto(a.email);
+    return `<tr><td><div style="display:flex;gap:9px;align-items:center">${photo?`<img class="mini-avatar" src="${esc(photo)}" alt="Foto do cliente">`:''}
+    <div><b>${esc(name)}</b><br><small class="muted">${esc(u.phone||a.email||'')}</small></div></div></td>
+    <td>${esc(a.date.split('-').reverse().join('/'))}<br>${esc(a.time)}</td>
+    <td>${(a.services||[]).map(x=>esc(x.n)).join('<br>')}</td><td>${money(a.total)}</td>
+    <td class="${a.status==='Concluído'?'status-done':'status-pending'}">${esc(a.status)}</td>
+    <td>${a.status==='Concluído'?'<span class="pill">Concluído</span>':`<button class="primary" onclick="completeAppt('${esc(a.id)}')">Concluir</button>`}</td></tr>`;
+  }).join(''):'<tr><td colspan="6" class="muted">Nenhum agendamento.</td></tr>';
+}
+function renderDashboard(){
+  const mk=dateRecife().slice(0,7),all=appts().filter(x=>x.status==='Concluído');
+  const month=all.filter(x=>x.date?.startsWith(mk)),revenue=month.reduce((sum,a)=>sum+Number(a.total||0),0),
+    serviceCount=month.reduce((sum,a)=>sum+(a.services?.length||0),0),year=dateRecife().slice(0,4);
+  el('admMetrics').innerHTML=`<div class="card"><span class="muted">Faturamento do mês</span><div class="metric">${money(revenue)}</div></div>
+    <div class="card"><span class="muted">Atendimentos concluídos</span><div class="metric">${month.length}</div></div>
+    <div class="card"><span class="muted">Serviços realizados</span><div class="metric">${serviceCount}</div></div>`;
+  const yr=all.filter(x=>x.date?.startsWith(year)),yrev=yr.reduce((sum,a)=>sum+Number(a.total||0),0);
+  el('admExtraMetrics').innerHTML=`<div class="card"><span class="muted">Faturamento do ano</span><div class="metric">${money(yrev)}</div></div>
+    <div class="card"><span class="muted">Ticket médio do mês</span><div class="metric">${money(month.length?revenue/month.length:0)}</div></div>
+    <div class="card"><span class="muted">Clientes atendidos no mês</span><div class="metric">${new Set(month.map(a=>a.email)).size}</div></div>`;
+  const pd=planData(),best=[...pd].sort((a,b)=>b.price*b.subs-a.price*a.subs)[0];
+  el('topPlan').innerHTML=best&&best.subs?`<b>${esc(best.name)}</b><p class="muted">${best.subs} assinantes • ${money(best.price*best.subs)}/mês</p>`:'<span class="muted">Sem assinantes informados.</span>';
+  const rank={};month.forEach(a=>(a.services||[]).forEach(s=>{const name=s.n;rank[name]??={qty:0,revenue:0};rank[name].qty++;rank[name].revenue+=Number(s.p||0)}));
+  const ranking=Object.entries(rank).sort((a,b)=>b[1].qty-a[1].qty);
+  el('serviceRanking').innerHTML=ranking.length?ranking.map(([n,x],i)=>`<div class="switch"><span>${i+1}º ${esc(n)}</span><b>${x.qty} serviços • ${money(x.revenue)}</b></div>`).join(''):'<span class="muted">Nenhum atendimento concluído neste mês.</span>';
+}
+function renderHistory(){
+  const done=appts().filter(x=>x.status==='Concluído'),buckets={};
+  done.forEach(a=>{const k=a.date?.slice(0,7);if(!k)return;buckets[k]??={money:0,count:0,services:0};buckets[k].money+=Number(a.total||0);buckets[k].count++;buckets[k].services+=(a.services||[]).length});
+  const keys=Object.keys(buckets).sort().reverse();
+  el('monthHistory').innerHTML=keys.length?keys.map(k=>{const x=buckets[k];return `<div class="card"><h3>${k.split('-').reverse().join('/')}</h3>
+    <div class="cards"><div><small class="muted">Faturamento</small><div class="metric">${money(x.money)}</div></div>
+    <div><small class="muted">Atendimentos</small><div class="metric">${x.count}</div></div>
+    <div><small class="muted">Serviços</small><div class="metric">${x.services}</div></div></div></div>`}).join(''):'<div class="card muted">O histórico será exibido conforme os atendimentos forem concluídos.</div>';
+}
+renderAdminAll=function(){renderDashboard();renderAdminAppointments();renderClubAdmin();renderAdminPlans();renderHistory()};
+function receptionCard(a){
+  const u=users()[a.email]||{},name=u.name||a.email||'Cliente',done=a.status==='Concluído';
+  return `<article class="card reception-appt ${done?'done':''}"><div class="appt-time">${esc(a.time)} • ${esc(a.date.split('-').reverse().join('/'))}</div>
+    <b>${esc(name)}</b><div class="muted">${esc(u.phone||'')}</div>
+    <div class="switch"><span>Serviços</span><b>${(a.services||[]).map(x=>esc(x.n)).join(' • ')}</b></div>
+    <div class="switch"><span>Duração</span><b>${a.duration||durationOf(a.services)} minutos</b></div>
+    <div class="switch"><span>Total</span><b>${money(a.total)}</b></div><span class="pill">${esc(a.status)}</span>
+    <div class="reception-actions">${done?'<span class="pill">Concluído</span>':`<button class="primary" onclick="receptionComplete('${esc(a.id)}',this)">Concluir atendimento</button>`}</div></article>`;
+}
+function renderReception(){
+  const list=[...appts()].sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),today=dateRecife(),
+    todayList=list.filter(x=>x.date===today),pending=list.filter(x=>x.status!=='Concluído'&&x.status!=='Cancelado'),done=list.filter(x=>x.status==='Concluído').reverse();
+  el('recTodayLabel').textContent=new Date(`${today}T12:00:00-03:00`).toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric',timeZone:BUSINESS_TZ});
+  el('recTodayList').innerHTML=todayList.length?todayList.map(receptionCard).join(''):'<div class="card muted">Nenhum agendamento para hoje.</div>';
+  el('recPendingList').innerHTML=pending.length?pending.map(receptionCard).join(''):'<div class="card muted">Nenhum atendimento pendente.</div>';
+  el('recDoneList').innerHTML=done.length?done.map(receptionCard).join(''):'<div class="card muted">Nenhum atendimento concluído.</div>';
+}
+async function completeAppt(id){
+  if(CLOUD){const {error}=await db.from('appointments').update({status:'Concluído',completed_at:new Date().toISOString()}).eq('id',id);
+    if(error){toast('Erro ao concluir: '+error.message);return}await loadCloudBookings()}
+  else{const list=appts(),a=list.find(x=>String(x.id)===String(id));if(!a)return;a.status='Concluído';a.completedAt=new Date().toISOString();localStorage.setItem('mh_appts',JSON.stringify(list))}
+  renderAdminAll();renderReception();renderAppointments();toast('Atendimento concluído e registrado no histórico.');
+}
+async function receptionComplete(id){await completeAppt(id)}
+function hideAllApps(){['landing','app','adminApp','receptionApp'].forEach(id=>el(id)?.classList.add('hidden'))}
+function enterApp(){const u=users()[current()];if(!u){toast('Perfil ainda não disponível.');return}
+  hideAllApps();el('app').classList.remove('hidden');el('hello').textContent='Olá, '+(u.name||'Cliente').split(' ')[0];
+  fillProfile();renderServices();renderSlots();renderAppointments();renderClientPlans();renderClientBarbershop();
+}
+function enterAdmin(){hideAllApps();el('adminApp').classList.remove('hidden');renderAdminAll()}
+function enterReception(){hideAllApps();el('receptionApp').classList.remove('hidden');renderReception()}
+async function logout(){
+  if(CLOUD)await db.auth.signOut();
+  else localStorage.removeItem('mh_current');
+  cloudUser=null;hideAllApps();el('landing').classList.remove('hidden');toast('Você saiu da conta.');
+}
+async function adminLogout(){
+  if(CLOUD)await db.auth.signOut();else localStorage.removeItem('ap_preview_role');
+  cloudRole='client';hideAllApps();el('landing').classList.remove('hidden');toast('Sessão administrativa encerrada.');
+}
+async function receptionLogout(){await adminLogout()}
+async function register(){return adrianoRegister()}
+async function adrianoRegister(){
+  const name=el('regName').value.trim(),email=el('regEmail').value.trim().toLowerCase(),phone=el('regPhone').value.trim(),
+    birth=el('regBirth').value,source=el('regSource').value,password=el('regPass').value;
+  if(!name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||!phone||!birth||!source||password.length<8){
+    toast('Preencha todos os campos. A senha deve ter ao menos 8 caracteres.');return;
+  }
+  if(!CLOUD&&!PREVIEW){toast('Cadastro indisponível: configure primeiro o Supabase no config.js.');return}
+  if(PREVIEW){
+    const usersMap=users();if(usersMap[email]){toast('E-mail já cadastrado nesta prévia.');return}
+    usersMap[email]={name,email,phone,birth,source,pass:password,profile:{}};saveUsers(usersMap);
+    localStorage.setItem('mh_current',email);closeAuth();enterApp();toast('Cadastro de demonstração concluído.');return;
+  }
+  const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name,phone,birth,source},emailRedirectTo:location.origin+location.pathname}});
+  if(error){toast(error.message);return}
+  if(!data.session){closeAuth();toast('Confira seu e-mail e confirme o cadastro.');return}
+  await loadCloudUser(data.user);closeAuth();enterApp();
+}
+async function adrianoLogin(){
+  const input=el('loginUser').value.trim(),pass=el('loginPass').value;
+  if(!input||!pass){toast('Informe e-mail ou usuário interno e senha.');return}
+  if(!CLOUD&&!PREVIEW){toast('Login indisponível: conecte o Supabase em config.js.');return}
+  if(PREVIEW){
+    const staff=previewStaff[input];
+    if(staff){if(staff.password!==pass){toast('Usuário ou senha incorretos.');return}
+      localStorage.setItem('ap_preview_role',staff.role);closeAuth();staff.role==='admin'?enterAdmin():enterReception();return}
+    const email=input.toLowerCase(),u=users()[email];
+    if(!u||u.pass!==pass){toast('E-mail ou senha incorretos.');return}
+    localStorage.setItem('mh_current',email);closeAuth();enterApp();return;
+  }
+  try{
+    let sessionUser=null;pendingRole='client';
+    if(input.includes('@')&&input.includes('.')){
+      const {data,error}=await db.auth.signInWithPassword({email:input.toLowerCase(),password:pass});if(error)throw error;
+      sessionUser=data.user;
+    }else{
+      const {data,error}=await db.functions.invoke('staff-login',{body:{username:input,password:pass}});
+      if(error||!data?.access_token||!data?.refresh_token)throw Error(data?.error||'Acesso interno não autorizado.');
+      const set=await db.auth.setSession({access_token:data.access_token,refresh_token:data.refresh_token});
+      if(set.error)throw set.error;
+      sessionUser=set.data.user;pendingRole=data.role;
+    }
+    await loadCloudUser(sessionUser);
+    const {data:aal,error:mfaError}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(mfaError)throw mfaError;
+    if(aal.currentLevel==='aal1'&&aal.nextLevel==='aal2'){
+      mfaRequired=true;await challengeMFA();return;
+    }
+    if(pendingRole!=='client' && aal.currentLevel!=='aal2'){
+      mfaRequired=true;await activateMFA();return;
+    }
+    await finishCloudLogin();
+  }catch(e){toast('Não foi possível entrar: '+(e.message||'Verifique os dados'));}
+}
+async function finishCloudLogin(){
+  await loadCloudData();
+  closeAuth();closeMfaModal(true);
+  if(pendingRole==='admin')enterAdmin();else if(pendingRole==='reception')enterReception();else enterApp();
+  startCloudSync();
+}
+async function loadCloudUser(user){
+  if(!user)return;
+  const {data:profile,error}=await db.from('profiles').select('*').eq('user_id',user.id).maybeSingle();
+  if(error)throw error;
+  cloudUser={name:profile?.full_name||user.user_metadata?.full_name||'Cliente',email:user.email,
+    phone:profile?.phone||user.user_metadata?.phone||'',birth:profile?.birth||user.user_metadata?.birth||'',source:profile?.source||'',
+    profile:{cpf:profile?.cpf||'',cep:profile?.cep||'',street:profile?.street||'',number:profile?.house_number||'',district:profile?.district||'',city:profile?.city||'',state:profile?.state||'',comp:profile?.complement||'',photo:profile?.avatar_url||''}};
+}
+function remoteAppointment(a){
+  return {id:a.id,email:a.profiles?.email||a.customer_email||cloudUser?.email||'',branch:'Principal',pro:SOLO_BARBER,
+    services:(a.service_items||[]).map(s=>({id:s.id,n:s.name,p:s.price,duration:s.duration})),date:a.booking_date,time:String(a.booking_time).slice(0,5),
+    duration:a.duration,total:Number(a.total),status:a.status,created:a.created_at};
+}
+async function loadCloudBookings(){
+  const {data,error}=await db.from('appointments').select('*,profiles:customer_id(email,full_name,phone,avatar_url)').order('starts_at',{ascending:false});
+  if(error)throw error;
+  cloudAppointments=(data||[]).map(x=>remoteAppointment(x));
+  (data||[]).forEach(a=>{if(a.profiles?.email)cloudProfiles[a.profiles.email]={name:a.profiles.full_name,email:a.profiles.email,phone:a.profiles.phone,profile:{photo:a.profiles.avatar_url}}});
+  if(el('app')&&!el('app').classList.contains('hidden')){renderAppointments();renderSlots()}
+  if(!el('adminApp').classList.contains('hidden'))renderAdminAll();
+  if(!el('receptionApp').classList.contains('hidden'))renderReception();
+}
+async function loadCloudPlans(){
+  const {data,error}=await db.from('plans').select('*').order('id');if(error)throw error;
+  cloudPlans=(data||[]).map(x=>({...x,subs:x.subscribers}));renderClientPlans();
+}
+async function loadCloudShop(){
+  const [s,p,r]=await Promise.all([
+    db.from('shop_settings').select('*').eq('id',1).maybeSingle(),
+    db.from('shop_photos').select('*').order('created_at'),
+    db.from('shop_reviews').select('*').order('created_at',{ascending:false})]);
+  for(const x of [s,p,r])if(x.error)throw x.error;
+  cloudShopInfo=s.data||DEFAULT_SHOP;cloudPhotoItems=p.data||[];cloudShopPhotos=cloudPhotoItems.map(x=>x.url);cloudReviews=r.data||[];
+  renderClientBarbershop();
+}
+async function loadCloudData(){await Promise.all([loadCloudPlans(),loadCloudShop(),loadCloudBookings()])}
+function startCloudSync(){
+  if(!CLOUD)return;
+  clearInterval(apSyncTimer);
+  apSyncTimer=setInterval(()=>{if(document.visibilityState==='visible')loadCloudBookings().catch(()=>{})},30000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadCloudBookings().catch(()=>{})});
+}
+async function saveProfile(){
+  const email=el('pEmail').value.trim().toLowerCase();
+  if(CLOUD){
+    const {data:{user}}=await db.auth.getUser();if(!user){toast('Sessão expirada.');return}
+    const fields={full_name:el('pName').value.trim(),phone:el('pPhone').value.trim(),birth:el('pBirth').value,
+      cpf:el('pCpf').value.trim(),cep:el('pCep').value.trim(),street:el('pStreet').value.trim(),house_number:el('pNumber').value.trim(),
+      district:el('pDistrict').value.trim(),city:el('pCity').value.trim(),state:el('pState').value.trim(),complement:el('pComp').value.trim()};
+    if(!fields.full_name){toast('Informe seu nome.');return}
+    const {error}=await db.from('profiles').update(fields).eq('user_id',user.id);
+    if(error){toast(error.message);return}
+    if(email!==user.email){const {error:mailErr}=await db.auth.updateUser({email});if(mailErr){toast('Perfil salvo. E-mail não alterado: '+mailErr.message);return}toast('Perfil salvo. Confirme a mudança de e-mail na sua caixa de entrada.')}
+    else toast('Perfil salvo.');
+    await loadCloudUser(user);el('hello').textContent='Olá, '+fields.full_name.split(' ')[0];return;
+  }
+  const all=users(),u=all[current()];if(!u)return;
+  u.name=el('pName').value.trim();u.phone=el('pPhone').value.trim();u.birth=el('pBirth').value;
+  u.profile={...u.profile,cpf:el('pCpf').value,cep:el('pCep').value,street:el('pStreet').value,number:el('pNumber').value,
+    district:el('pDistrict').value,city:el('pCity').value,state:el('pState').value,comp:el('pComp').value};
+  all[current()]=u;saveUsers(all);el('hello').textContent='Olá, '+u.name.split(' ')[0];toast('Perfil salvo na prévia.');
+}
+async function setPhoto(input){
+  const f=input.files?.[0];if(!f||!f.type.startsWith('image/'))return;
+  if(CLOUD){
+    const {data:{user}}=await db.auth.getUser();if(!user)return;
+    const path=`${user.id}/avatar-${crypto.randomUUID()}.${(f.type.split('/')[1]||'png').replace(/[^a-z0-9]/gi,'')}`;
+    const {error}=await db.storage.from('avatars').upload(path,f,{contentType:f.type});if(error){toast(error.message);return}
+    const url=db.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+    const {error:e2}=await db.from('profiles').update({avatar_url:url}).eq('user_id',user.id);
+    if(e2){toast(e2.message);return}
+    cloudUser.profile.photo=url;setPhotoUI(url);return;
+  }
+  const result=await new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f)});
+  const us=users(),u=us[current()];u.profile={...u.profile,photo:result};us[current()]=u;saveUsers(us);setPhotoUI(result);
+}
+function changePassword(){
+  if(!CLOUD){toast('Redefinição por e-mail requer Supabase configurado.');return}
+  el('resetAccountEmail').value=current();updateStatus('resetMessage','');el('resetRequestModal').classList.remove('hidden');
+}
+function closeResetRequest(){el('resetRequestModal').classList.add('hidden')}
+async function sendPasswordReset(){
+  const email=current();if(!email||!CLOUD){toast('E-mail da conta indisponível.');return}
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:`${location.origin}${location.pathname}#password-recovery`});
+  if(error){updateStatus('resetMessage',error.message);return}
+  closeResetRequest();toast('Enviamos um link de redefinição ao seu e-mail.');
+}
+async function confirmNewPassword(){
+  if(!CLOUD){toast('Conecte o backend.');return}
+  const a=el('newPassword').value,b=el('newPasswordConfirm').value;
+  if(a.length<8||a!==b){updateStatus('newPasswordMessage','Use ao menos 8 caracteres e confirme a mesma senha.');return}
+  const {error}=await db.auth.updateUser({password:a});
+  if(error){updateStatus('newPasswordMessage',error.message);return}
+  el('newPassword').value='';el('newPasswordConfirm').value='';el('newPasswordModal').classList.add('hidden');
+  history.replaceState(null,'',location.pathname+location.search);
+  toast('Senha redefinida. A nova senha já está ativa.');
+}
+async function activateMFA(){
+  if(!CLOUD){toast('2FA precisa do Supabase configurado.');return}
+  const {data,error}=await db.auth.mfa.enroll({factorType:'totp',friendlyName:'Adriano Paulo Barbearia'});
+  if(error){toast(error.message);return}
+  mfaFlow='enroll';mfaFactorId=data.id;
+  el('mfaQr').src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(data.totp.qr_code);
+  el('mfaQrContainer').classList.remove('hidden');el('mfaSecret').textContent=`Chave manual: ${data.totp.secret}`;
+  updateStatus('mfaInstructions','Escaneie com Google Authenticator ou Authy e informe o código para ativar o 2FA.');
+  updateStatus('mfaMessage','');el('mfaModal').classList.remove('hidden');
+}
+async function challengeMFA(){
+  if(!CLOUD)return;
+  const {data,error}=await db.auth.mfa.listFactors();if(error){toast(error.message);return}
+  const first=(data.totp||[]).find(x=>x.status==='verified');
+  if(!first){await activateMFA();return}
+  mfaFlow='challenge';mfaFactorId=first.id;el('mfaQrContainer').classList.add('hidden');
+  updateStatus('mfaInstructions','Informe o código do seu aplicativo autenticador para acessar.');
+  updateStatus('mfaMessage','');el('mfaModal').classList.remove('hidden');
+}
+async function confirmMfa(){
+  const code=el('mfaCode').value.trim();if(!/^\d{6}$/.test(code)){updateStatus('mfaMessage','Digite os 6 dígitos do autenticador.');return}
+  const {error}=await db.auth.mfa.challengeAndVerify({factorId:mfaFactorId,code});
+  if(error){updateStatus('mfaMessage',error.message);return}
+  el('mfaCode').value='';closeMfaModal(true);
+  toast('Autenticação em dois fatores validada.');
+  if(mfaRequired){mfaRequired=false;await finishCloudLogin()}
+}
+function closeMfaModal(force=false){
+  if(mfaRequired&&!force){toast('Conclua o 2FA para acessar esta área.');return}
+  el('mfaModal').classList.add('hidden');
+}
+function showCalendarStatus(){
+  toast(CLOUD?'Agendamentos sincronizam com a agenda da barbearia quando a função Google Calendar estiver configurada.':'Conecte o Supabase e a conta Google do estabelecimento para sincronizar.');
+}
+async function syncCalendarNow(){
+ if(!CLOUD){toast('Google Agenda exige configuração do backend.');return}
+ try{const {data,error}=await db.functions.invoke('sync-calendar',{body:{}});if(error)throw error;
+ toast(`Google Agenda: ${data.synced||0} sincronizados, ${data.failed||0} pendentes.`)}
+ catch(e){toast('Falha na integração Google Agenda: '+(e.message||'Verifique as credenciais'))}
+}
+
+async function bootAdrianoApp(){
+  state.branch='Principal';state.pro=SOLO_BARBER;state.services=[];state.time='';
+  el('datePick').min=dateRecife();renderServices();renderClientPlans();renderClientBarbershop();renderSlots();
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+  if(PREVIEW){
+    const banner=document.createElement('div');banner.textContent='MODO DEMONSTRAÇÃO: os dados ficam somente neste navegador. Não publique esta versão.';
+    banner.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:100;background:#000;color:#D4AF37;border:1px solid #D4AF37;padding:7px 10px;text-align:center;border-radius:10px;font-size:12px;pointer-events:none';
+    document.body.append(banner);
+    const role=localStorage.getItem('ap_preview_role');
+    if(role==='admin')enterAdmin();else if(role==='reception')enterReception();else if(current()&&users()[current()])enterApp();return;
+  }
+  if(!CLOUD)return;
+  if(!window.supabase?.createClient){console.error('Biblioteca Supabase não carregou.');return}
+  db=window.supabase.createClient(AP_CFG.supabaseUrl,AP_CFG.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  db.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY')queueMicrotask(()=>{el('newPasswordModal').classList.remove('hidden');updateStatus('newPasswordMessage','')});
+    if(event==='SIGNED_OUT'){cloudUser=null;cloudRole='client';clearInterval(apSyncTimer);hideAllApps();el('landing').classList.remove('hidden')}
+  });
+  try{
+    const {data:{session}}=await db.auth.getSession();
+    if(session?.user){
+      await loadCloudUser(session.user);
+      const {data:aal}=await db.auth.mfa.getAuthenticatorAssuranceLevel();
+      if(aal?.currentLevel==='aal1'&&aal?.nextLevel==='aal2'){mfaRequired=true;await challengeMFA();return}
+      const {data:staff}=await db.from('staff_accounts').select('role').eq('user_id',session.user.id).maybeSingle();
+      pendingRole=staff?.role||'client';
+      if(pendingRole!=='client'&&aal?.currentLevel!=='aal2'){mfaRequired=true;await activateMFA();return}
+      await finishCloudLogin();
+    }else{
+      await Promise.all([loadCloudPlans(),loadCloudShop()]);
+    }
+  }catch(e){console.error('Falha inicializando o aplicativo:',e);toast('Não foi possível carregar dados do servidor.');}
+}
+
+window.addEventListener('DOMContentLoaded',bootAdrianoApp);
+</script>
+<div aria-label="Redefinir senha" aria-modal="true" class="modal hidden" id="resetRequestModal" role="dialog">
+<div class="auth"><button aria-label="Fechar" class="ghost close-modal" onclick="closeResetRequest()">×</button><h2>Redefinir senha</h2>
+<p class="muted">O link será enviado para o e-mail cadastrado em sua conta.</p>
+<div class="field"><label>E-mail cadastrado</label><input id="resetAccountEmail" readonly="" type="email"/></div>
+<button class="primary" onclick="sendPasswordReset()">Enviar link de redefinição</button><p class="muted" id="resetMessage" role="status"></p></div></div>
+<div aria-label="Nova senha" aria-modal="true" class="modal hidden" id="newPasswordModal" role="dialog"><div class="auth">
+<h2>Definir nova senha</h2><p class="muted">Escolha uma nova senha de acesso ao site ou aplicativo.</p>
+<div class="field"><label>Nova senha</label><input autocomplete="new-password" id="newPassword" minlength="8" type="password"/></div>
+<div class="field"><label>Confirmar senha</label><input autocomplete="new-password" id="newPasswordConfirm" minlength="8" type="password"/></div>
+<button class="primary" onclick="confirmNewPassword()">Atualizar minha senha</button><p class="muted" id="newPasswordMessage" role="status"></p></div></div>
+<div aria-label="Autenticação em dois fatores" aria-modal="true" class="modal hidden" id="mfaModal" role="dialog"><div class="auth">
+<button aria-label="Fechar" class="ghost close-modal" onclick="closeMfaModal()">×</button>
+<h2>Autenticação em dois fatores</h2><p class="muted" id="mfaInstructions">Proteja sua conta com o aplicativo autenticador.</p>
+<div class="hidden" id="mfaQrContainer" style="text-align:center"><img alt="QR Code para configurar autenticação" id="mfaQr" style="width:200px;max-width:100%;background:#fff;padding:12px;border-radius:10px"/><div><small class="muted" id="mfaSecret"></small></div></div>
+<div class="field"><label>Código de 6 dígitos</label><input autocomplete="one-time-code" id="mfaCode" inputmode="numeric" maxlength="6" placeholder="000000" type="text"/></div>
+<button class="primary" onclick="confirmMfa()">Verificar código</button><p class="muted" id="mfaMessage" role="status"></p></div></div>
+</body></html>
