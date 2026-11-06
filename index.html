@@ -268,7 +268,7 @@ const plans=[
 function fillProfile(){let u=users()[current()],p=u.profile||{};pName.value=u.name;pEmail.value=u.email;pPhone.value=u.phone;pBirth.value=u.birth;['Cpf','Cep','Street','Number','District','City','State','Comp'].forEach(k=>document.getElementById('p'+k).value=p[k.toLowerCase()]||'');if(p.photo)setPhotoUI(p.photo)}function saveProfile(){let all=users(),u=all[current()],old=current(),newEmail=pEmail.value.trim().toLowerCase();u.name=pName.value.trim();u.email=newEmail;u.phone=pPhone.value.trim();u.birth=pBirth.value;u.profile={...(u.profile||{}),cpf:pCpf.value,cep:pCep.value,street:pStreet.value,number:pNumber.value,district:pDistrict.value,city:pCity.value,state:pState.value,comp:pComp.value};if(newEmail!==old){delete all[old];all[newEmail]=u;localStorage.setItem('mh_current',newEmail)}else all[old]=u;saveUsers(all);hello.textContent='Olá, '+u.name.split(' ')[0];toast('Alterações salvas.')}
 async function lookupCep(){let cep=pCep.value.replace(/\D/g,'');if(cep.length!==8)return;try{let r=await fetch('https://viacep.com.br/ws/'+cep+'/json/');let d=await r.json();if(d.erro)return toast('CEP não encontrado.');pStreet.value=d.logradouro||'';pDistrict.value=d.bairro||'';pCity.value=d.localidade||'';pState.value=d.uf||''}catch(e){toast('Não foi possível consultar o CEP agora.')}}function setPhoto(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{let all=users(),u=all[current()];u.profile={...(u.profile||{}),photo:r.result};all[current()]=u;saveUsers(all);setPhotoUI(r.result)};r.readAsDataURL(f)}function setPhotoUI(src){profileAvatar.innerHTML=`<img src="${src}">`;topAvatar.innerHTML=`<img src="${src}">`}function changePassword(){let n=prompt('Digite a nova senha (mínimo 6 caracteres):');if(!n)return;if(n.length<6)return toast('A senha precisa ter pelo menos 6 caracteres.');let all=users();all[current()].pass=n;saveUsers(all);toast('Senha alterada neste protótipo.')}function demoIntegration(x){toast(x+' requer integração segura no backend antes de ser ativado.')}function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.add('hidden'),3200)}
 
-const ADMIN_EMAIL='Adri@no8809';
+// Credenciais da equipe são verificadas exclusivamente no Supabase (Edge Function).
 const defaultStaff=[{name:'Sem preferência',branch:'Principal',quality:'Atendimento Adriano Paulo',specialty:'Serviços da barbearia',photo:''}];
 function staffData(){let x=JSON.parse(localStorage.getItem('mh_staff')||'null');if(!x){x=defaultStaff;localStorage.setItem('mh_staff',JSON.stringify(x))}return x}function saveStaff(x){localStorage.setItem('mh_staff',JSON.stringify(x))}
 function planData(){let x=JSON.parse(localStorage.getItem('mh_plan_admin')||'null');if(!x){x=[{name:'Corte ILIMITADO',price:74.90,vacancies:5,subs:0},{name:'Corte e Barba ILIMITADO',price:129.90,vacancies:2,subs:0},{name:'Barba ILIMITADA',price:89.90,vacancies:4,subs:0}];localStorage.setItem('mh_plan_admin',JSON.stringify(x))}return x}function savePlanData(x){localStorage.setItem('mh_plan_admin',JSON.stringify(x))}
@@ -680,6 +680,12 @@ async function adrianoLogin(){
     if(input.includes('@')&&input.includes('.')){
       const {data,error}=await db.auth.signInWithPassword({email:input.toLowerCase(),password:pass});if(error)throw error;
       sessionUser=data.user;
+      // O ADM Geral entra por e-mail e senha, mas só abre o painel
+      // quando tiver um vínculo administrativo criado no Supabase.
+      const {data:staff,error:staffError}=await db.from('ap_staff_accounts')
+        .select('role').eq('user_id',sessionUser.id).maybeSingle();
+      if(staffError)throw staffError;
+      pendingRole=staff?.role||'client';
     }else{
       const {data,error}=await db.functions.invoke('ap-staff-login',{body:{username:input,password:pass}});
       if(error||!data?.access_token||!data?.refresh_token)throw Error(data?.error||'Acesso interno não autorizado.');
