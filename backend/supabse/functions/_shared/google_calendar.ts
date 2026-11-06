@@ -7,7 +7,7 @@ function b64url(value:Uint8Array|string){
   return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 async function googleToken(){
-  const input=Deno.env.get('GOOGLE_SERVICE_ACCOUNT_JSON');
+  const input=Deno.env.get('AP_GOOGLE_SERVICE_ACCOUNT_JSON');
   if(!input)throw Error('Google Calendar não foi configurado.');
   const sa=JSON.parse(input) as {client_email:string;private_key:string};
   const base64=sa.private_key.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\s/g,'');
@@ -28,8 +28,8 @@ async function googleToken(){
 }
 export type GoogleAppt={id:string;starts_at:string;ends_at:string;service_items:{name:string}[]};
 export async function pushGoogleCalendar(a:GoogleAppt){
-  const calendarId=Deno.env.get('GOOGLE_CALENDAR_ID');
-  if(!calendarId)throw Error('GOOGLE_CALENDAR_ID não configurado.');
+  const calendarId=Deno.env.get('AP_GOOGLE_CALENDAR_ID');
+  if(!calendarId)throw Error('AP_GOOGLE_CALENDAR_ID não configurado.');
   const eventId='ap'+a.id.replaceAll('-','');
   const token=await googleToken();
   const event={id:eventId,summary:'Adriano Paulo Barbearia • '+a.service_items.map(x=>x.name).join(' + '),
